@@ -8,9 +8,9 @@ def login(request, cursor):
     client = user.login(cursor)
     if client is not None:
         # session[client.courriel] = client
-        return render_template('../../templates/index.html', profile={
+        return render_template('index.html', profile={
             'courriel': client.courriel,
             'nom': client.nom,
             'avatar': client.avatar
         })
-    return render_template('../../templates/login.html', message="Informations invalides!")
+    return render_template('login.html', message="Informations invalides!")

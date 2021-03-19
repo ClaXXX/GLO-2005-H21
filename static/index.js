@@ -6,7 +6,7 @@ Vue.component('home', {
 const vueApp = new Vue({
     el: '#app',
     data: {
-      message: 'Hello Vue!'
+      message: `Hello Vue! Random Number: ${Math.random()}`
     },
     delimiters: ['[[', ']]']
 })
