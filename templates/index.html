@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Bonjour!</title>
+  <link rel="stylesheet" type="text/css" href="../static/MonFichierStyle.css">
+</head>
+<body>
+  <div id="app">
+    {% include 'bienvenu.html' %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

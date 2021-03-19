@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "artshale"
+version = "0.1.0"
+description = "Boutique en ligne spécialisée dans la vente d’objets d’art. Elle permet aux artistes de vendre leurs œuvres et de prendre des commandes"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-dotenv = "^0.15.0"
+bcrypt = "^3.2.0"
+pytest = "^6.2.2"
+Flask-Cors = "^3.0.10"
+pytest-flask = "^1.2.0"
+
+[tool.poetry.dev-dependencies]
+Flask = "^1.1.2"
+PyMySql = "^1.0.2"
+cryptography = "^3.4.6"
+
+[tool.poetry.scripts]
+database = "config.sql:setup"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "Flask>=1.1.2", "PyMySQL>=1.0.2", "cryptography>=3.4.6"]
+build-backend = "poetry.core.masonry.api"
