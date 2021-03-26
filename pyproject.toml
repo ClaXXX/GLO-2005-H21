@@ -11,6 +11,9 @@ bcrypt = "^3.2.0"
 pytest = "^6.2.2"
 Flask-Cors = "^3.0.10"
 pytest-flask = "^1.2.0"
+pandas = "^1.2.3"
+Unidecode = "^1.2.0"
+python-lorem = "^1.1.2"
 
 [tool.poetry.dev-dependencies]
 Flask = "^1.1.2"
