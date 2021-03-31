@@ -13,6 +13,7 @@ poetry install
 ```
 
 ## Configuration
+### Environnement
 Le package Dotenv permet de déclarer l'ensemble des variables d'environnement dans un fichier .env. Ainsi pour ce projet, nous aurons un modèle de fichier:
 ```dotenv
 FLASK_APP=src/main.py
@@ -20,6 +21,11 @@ SQL_HOST=localhost
 SQL_USER=root
 SQL_PASSWORD=password
 SQL_DB=artshale
+```
+### Base de donnée
+```shell
+mysql -u root -p < commandes.sql # Créé toutes les tables
+mysql -u root -p < gachettes.sql # Créé les gachettes
 ```
 
 ## Execution

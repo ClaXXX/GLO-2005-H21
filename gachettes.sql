@@ -1,3 +1,5 @@
+USE tp;
+
 -- Contrainte de spécialisation
 DELIMITER //
 CREATE TRIGGER devenirArtiste
@@ -26,6 +28,21 @@ CREATE TRIGGER estCourriel
         END;//
 DELIMITER ;
 
+-- Contrainte pour vérifier qu'un commentaire soit écrit par le demandeur ou l'artiste
+DELIMITER //
+CREATE TRIGGER commentaireAuteur
+    BEFORE INSERT ON Commentaire
+    FOR EACH ROW
+    BEGIN
+        IF NEW.auteur NOT IN (SELECT C.demandeur FROM Commande C WHERE C.num = NEW.numCommande) -- Si l'auteur du commentaire est le demandeur
+            AND NEW.auteur NOT IN (SELECT A.courriel FROM Commande C, Artiste A WHERE NEW.numCommande = C.num AND A.nom = C.superviseur) -- Si l'auteur du commentaire est le superviseur
+        THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Ajout du commentaire interdit: auteur invalide';
+        END IF;
+    END; //
+DELIMITER ;
+
 -- Contrainte pour empêcher un artiste de supprimer son compte client s'il a des commandes en cours
 DELIMITER //
 CREATE TRIGGER artisteCmdEnCours
@@ -52,4 +69,18 @@ CREATE TRIGGER clientCmdEnCours
             SET MESSAGE_TEXT =  'Supression du compte client interdite: commandes en cours';
                 END IF;
         END;//
+DELIMITER ;
+
+-- Contrainte lors de la suppression d'une oeuvre, si elle est liée à une commande
+DELIMITER //
+CREATE TRIGGER oeuvreCmdLien
+    BEFORE DELETE ON Oeuvre
+    FOR EACH ROW
+    BEGIN
+        IF EXISTS (SELECT * FROM Commande C WHERE C.superviseur = OLD.auteur AND C.oeuvre = OLD.nom)
+        THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Suppression de l\'oeuvre interdite: liée à une commande';
+        end if;
+    END; //
 DELIMITER ;
