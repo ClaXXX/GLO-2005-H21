@@ -1,22 +1,16 @@
-<html>
-<head>
-<title>Page d'accueil</title>
-<link rel="stylesheet" type="text/css" href="../static/MonFichierStyle.css">
-<script type="text/javascript" src="../static/MonFichierCode.js"></script>
-</head>
-<body onload="SupprimerContenu()"> 
-
-<p class="centre">Bonjour. Vous devez vous identifier.</p>
-<form action="login" method="post">
-<p>Votre courriel: <input type="text" name="courriel"><br>
-Votre mot de passe: <input type="password" name="motpasse">
-</p><br>
-<input type="submit" value="Identification" name="soumettre"> 
-</form>
-
-{% if message %}
-<div id="cadre">{{ message }}"</div>
-{% endif %}
-
-</body>
-</html>
+<div id="login-content" class="col-12 container-padding">
+    <form id="loginForm" v-on:submit.prevent="onLogin($event)">
+        <div class="form-group">
+            <input class="form-control input-lg" type="email" autocomplete="username" id="courriel" name="courriel"
+                   placeholder="courriel@example.com" v-model="courriel" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control input-lg" type="password" autocomplete="current-password" id="mdp" name="mdp"
+                   placeholder="Mot de passe" minlength="4" maxlength="32" v-model="mdp" required>
+        </div>
+        <input class="btn btn-primary btn-block btn-lg" type="submit" value="Se Connecter">
+        {% if message %}
+            <span id="loginError" class="error active" aria-live="polite">{{ message }}</span>
+        {% endif %}
+    </form>
+</div>
