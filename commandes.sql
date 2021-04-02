@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Artiste(
 );
 
 CREATE TABLE IF NOT EXISTS Oeuvre(
-    nom varchar(32) NOT NULL,
+    nom varchar(64) NOT NULL,
     auteur varchar(32) NOT NULL,
     dateCreation date,
     type varchar(16),
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS Oeuvre(
 CREATE TABLE IF NOT EXISTS Commande(
     num integer AUTO_INCREMENT PRIMARY KEY,
     oeuvre varchar(32),
-    superviseur varchar(32) NOT NULL,
-    demandeur varchar(32) NOT NULL,
+    superviseur varchar(64) NOT NULL,
+    demandeur varchar(64) NOT NULL,
     statut enum('En cours', 'Complétée', 'En attente de confirmation', 'Annulée') DEFAULT 'En cours',
     prix double(6,2),
     type enum('Création', 'Réservation') NOT NULL,
@@ -42,9 +42,11 @@ CREATE TABLE IF NOT EXISTS Commande(
         REFERENCES Oeuvre(nom),
     FOREIGN KEY(superviseur)
         REFERENCES Artiste(nom),
+    FOREIGN KEY(oeuvre)
+        REFERENCES Oeuvre(nom),
     FOREIGN KEY(demandeur)
         REFERENCES Client(courriel)
-            ON DELETE CASCADE
+            ON DELETE NO ACTION
             ON UPDATE CASCADE
 );
 
@@ -59,13 +61,13 @@ CREATE TABLE IF NOT EXISTS Facture(
 );
 
 CREATE TABLE IF NOT EXISTS Commentaire(
-    id integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    auteur varchar(32) NOT NULL,
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    auteur varchar(64) NOT NULL,
     numCommande integer NOT NULL,
     texte varchar(128) NOT NULL,
     creation date DEFAULT (CURRENT_DATE),
     FOREIGN KEY(auteur)
-        REFERENCES Artiste(nom),
+        REFERENCES Client(nom),
     FOREIGN KEY(numCommande)
         REFERENCES Commande(num)
 );
