@@ -26,13 +26,13 @@ CREATE TRIGGER estCourriel
         END;//
 DELIMITER ;
 
--- Contrainte pour empêcher un artiste de supprimer son compte client s'il a des commandes en cours
+-- Contrainte pour empêcher un artiste de supprimer son compte client s'il a passé au moins une commande
 DELIMITER //
-CREATE TRIGGER artisteCmdEnCours
+CREATE TRIGGER artisteCmd
     BEFORE DELETE ON Artiste
     FOR EACH ROW
     BEGIN
-        IF  OLD.nom IN (SELECT C.superviseur FROM Commande C WHERE C.statut = 'En cours')
+        IF  OLD.nom IN (SELECT C.superviseur FROM Commande C)
         THEN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT =  'Supression du compte artiste interdite: commandes en cours';
@@ -40,16 +40,30 @@ CREATE TRIGGER artisteCmdEnCours
         END;//
 DELIMITER ;
 
--- Contrainte pour empêcher un client de suprimer son compte alors qu'il a une cmd en cours
+-- Contrainte pour empêcher un client de supprimer son compte alors qu'il a passé au moins une cmd
 DELIMITER //
-CREATE TRIGGER clientCmdEnCours
+CREATE TRIGGER clientCmd
     BEFORE DELETE ON Client
     FOR EACH ROW
     BEGIN
-        IF  OLD.courriel IN (SELECT C.demandeur FROM Commande C WHERE C.statut = 'En cours')
+        IF  OLD.courriel IN (SELECT C.demandeur FROM Commande C)
         THEN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT =  'Supression du compte client interdite: commandes en cours';
                 END IF;
         END;//
 DELIMITER ;
+
+-- Création d'un tuple oeuvre lorsqu'une commande de type Création est passée
+DELIMITER //
+CREATE TRIGGER nouvOeuvre
+    BEFORE INSERT ON Commande
+    FOR EACH ROW
+    BEGIN
+        IF  NEW.oeuvre  NOT IN (SELECT O.nom FROM Oeuvre O) AND NEW.type = 'création'
+        THEN
+            INSERT INTO Oeuvre(nom,auteur) VALUES (NEW.oeuvre, NEW.superviseur);
+                END IF;
+        END;//
+DELIMITER ;
+
