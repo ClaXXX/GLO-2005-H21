@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS Commentaire(
     auteur varchar(32) NOT NULL,
     numCommande integer NOT NULL,
     texte varchar(128) NOT NULL,
-    creation DATE DEFAULT (CURRENT_DATE),
+    creation date DEFAULT (CURRENT_DATE),
     FOREIGN KEY(auteur)
         REFERENCES Artiste(nom),
     FOREIGN KEY(numCommande)
