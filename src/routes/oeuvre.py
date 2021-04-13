@@ -1,18 +1,18 @@
 from src.database.oeuvre import Oeuvre
-from flask import render_template
+
 
 def expo(curseur):
-     galerie = Oeuvre.exposition_totale(curseur)
-
-     return render_template('index.html', galerie ={
-          'Oeuvres': [x[0].nom for x in galerie]
-
-     })
+     return Oeuvre.exposition_totale(curseur)
 
 def select_oeuvres(request, curseur):
-     type = request.form.get('type')
-     galerie = Oeuvre.tri_oeuvre(type,curseur)
+     type = request.args.get('type')
 
-     return render_template('index.html', galerie = {
-          'Oeuvres':
-     })
+     return Oeuvre.tri_oeuvre(type,curseur)
+
+def recherche_nom(request,curseur):
+    return Oeuvre.par_nom(request,curseur)
+
+def recherche_arti(request,curseur):
+    return Oeuvre.par_artiste(request,curseur)
+def recherche_type(request,curseur):
+    return Oeuvre.par_type(request,curseur)
