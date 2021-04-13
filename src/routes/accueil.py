@@ -13,6 +13,4 @@ def select_oeuvres(request, curseur):
      type = request.form.get('type')
      galerie = Oeuvre.tri_oeuvre(type,curseur)
 
-     return render_template('index.html', galerie = {
-          'Oeuvres':
-     })
+     return render_template('index.html')

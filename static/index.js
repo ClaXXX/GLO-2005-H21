@@ -31,7 +31,6 @@ const vueApp = new Vue({
                 type: 'Dessin',
                 description: 'Courte description'
             }
-
         ]
     },
     delimiters: ['[[', ']]'],

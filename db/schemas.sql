@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Oeuvre(
 
 CREATE TABLE IF NOT EXISTS Commande(
     num integer AUTO_INCREMENT PRIMARY KEY,
-    oeuvre varchar(32),
+    oeuvre varchar(64),
     superviseur varchar(64) NOT NULL,
     demandeur varchar(64) NOT NULL,
     statut enum('En cours', 'Complétée', 'En attente de confirmation', 'Annulée') DEFAULT 'En cours',
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS Commentaire(
     texte varchar(128) NOT NULL,
     creation date DEFAULT (CURRENT_DATE),
     FOREIGN KEY(auteur)
-        REFERENCES Client(nom),
+        REFERENCES Client(courriel),
     FOREIGN KEY(numCommande)
         REFERENCES Commande(num)
 );
