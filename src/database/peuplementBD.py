@@ -16,7 +16,7 @@ pd.set_option('display.max_colwidth', -1)
 
 # Connection à la bd pour peupler les tables
 load_dotenv()
-db = DataBase(getenv('SQL_HOST'), getenv('SQL_USER'), getenv('SQL_PASSWORD'), getenv('SQL_DB'))
+db = DataBase('localhost', 'root', 'xZic5E%7', 'tp')
 curseur = db.cursor()
 
 def peupler(df, nom_table):
@@ -35,8 +35,8 @@ def gen_MP():
     lettres = string.ascii_letters
     chiffres = string.digits
     chars = lettres + chiffres
-    motpasse = "".join(random.choice(chars) for x in range(random.randint(16, 32)))
-    return motpasse
+    mdp = "".join(random.choice(chars) for x in range(random.randint(16, 32)))
+    return mdp
 
 # création d'un dataframe Client via lecture du fichier .csv contenant noms accentués
 df = pd.read_csv('nomClient2.csv', encoding='latin1')
@@ -49,11 +49,11 @@ df.drop(['adresse_rue','ville','code_postal'],axis=1,inplace=True)
 df = df.assign(courriel = df['prenom'] + '.' + df['nom'])
 df['courriel'] =df['courriel'].apply(lambda x: uni.unidecode(x.lower()) + '@gmail.com') #création du courriel sans accents et en minuscule
 
-#Création de la colonne motPasse
-df = df.assign(motPasse=[gen_MP() for x in range(len(df))])
+#Création de la colonne mdp
+df = df.assign(mdp=[gen_MP() for x in range(len(df))])
 
 #Peuplement de la table Client
-peupler(df,'client')
+peupler(df,'Client')
 
 
 """

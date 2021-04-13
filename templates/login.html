@@ -2,15 +2,13 @@
     <form id="loginForm" v-on:submit.prevent="onLogin($event)">
         <div class="form-group">
             <input class="form-control input-lg" type="email" autocomplete="username" id="courriel" name="courriel"
-                   placeholder="courriel@example.com" v-model="courriel" required>
+                   placeholder="courriel@example.com" v-model="loginForm.courriel" required>
         </div>
         <div class="form-group">
             <input class="form-control input-lg" type="password" autocomplete="current-password" id="mdp" name="mdp"
-                   placeholder="Mot de passe" minlength="4" maxlength="32" v-model="mdp" required>
+                   placeholder="Mot de passe" minlength="4" maxlength="32" v-model="loginForm.mdp" required>
         </div>
         <input class="btn btn-primary btn-block btn-lg" type="submit" value="Se Connecter">
-        {% if message %}
-            <span id="loginError" class="error active" aria-live="polite">{{ message }}</span>
-        {% endif %}
+        <!--<span id="loginError" class="error active" aria-live="polite">[[ loginForm.msg ]]</span>-->
     </form>
 </div>

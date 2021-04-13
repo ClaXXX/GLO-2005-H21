@@ -74,7 +74,6 @@ const vueApp = new Vue({
         ],
         type_recherche: '',
         recherche:'',
-
     },
     delimiters: ['[[', ']]'],
     mounted:function(){

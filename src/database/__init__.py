@@ -1,9 +1,13 @@
-from pymysql import connect
+from pymysql import connect, Connection
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
 
 
 class DataBase:
-    def __init__(self, host, user, password, db):
-        self.connection = connect(host=host, user=user, passwd=password, db=db,autocommit = True)
+    connection = connect(host=getenv('SQL_HOST'), user=getenv('SQL_USER'), password=getenv('SQL_PASSWORD'), db=getenv('SQL_DB'))
 
-    def cursor(self):
-        return self.connection.cursor()
+    @staticmethod
+    def cursor():
+        return DataBase.connection.cursor()

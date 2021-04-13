@@ -24,7 +24,7 @@ SQL_DB=artshale
 ```
 ### Base de donnée
 ```shell
-mysql -u root -p < commandes.sql # Créé toutes les tables
+mysql -u root -p < schemas.sql # Créé toutes les tables
 mysql -u root -p < gachettes.sql # Créé les gachettes
 ```
 

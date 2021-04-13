@@ -1,14 +1,28 @@
-<div class="col-12 col-md-6 container-padding">
-    <h2> Créer un compte </h2>
-    <form id="registerForm">
+<div class="col-12 container-padding">
+    <form id="registerForm" v-on:submit.prevent="onRegister($event)">
         <div class="form-group">
-            <input class="form-control input-lg" type="email" id="newEmail" name="email" placeholder="email@example.com" required>
+            <input class="form-control input-lg" type="text" autocomplete="name" id="nom" name="nom"
+                   placeholder="Nom" v-model="registerForm.nom" maxlength="32" required>
         </div>
         <div class="form-group">
-            <input class="form-control input-lg" type="password" id="newPassword" name="password" placeholder="password" minlength="4" maxlength="32" required>
+            <input class="form-control input-lg" type="text" autocomplete="family-name" id="prenom" name="prenom"
+                   placeholder="Prénom" v-model="registerForm.prenom" maxlength="32" required>
         </div>
         <div class="form-group">
-            <input class="form-control input-lg" type="password" id="confirmNewPassword" name="password" placeholder="confirm password" minlength="4" maxlength="32" required>
+            <input class="form-control input-lg" type="text" autocomplete="street-address" id="adresse" name="adresse"
+                   placeholder="Adresse" v-model="registerForm.adresse" maxlength="64" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control input-lg" type="email" autocomplete="username" id="nouveauCourriel" name="nouveauCourriel"
+                   placeholder="courriel@example.com" v-model="registerForm.courriel" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control input-lg" type="password" autocomplete="new-password" id="nouveauMdp" name="nouveauMdp"
+                   placeholder="Mot de passe" minlength="4" maxlength="32" v-model="registerForm.mdp" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control input-lg" type="password" autocomplete="new-password" id="confirmNouveauMdp"
+                   name="confirmNouveauMdp" placeholder="Confirme mot de passe" minlength="4" maxlength="32" v-model="registerForm.mdpConfirmation" required>
         </div>
         <input class="btn btn-primary btn-block btn-lg" type="submit" value="Register">
         <span id="registerError" class="error" aria-live="polite"></span>
