@@ -1,12 +1,13 @@
 from flask import Flask
+
 from flask_login import LoginManager, login_required
 from src.database import DataBase, client
-from flask import render_template, request
+from flask import render_template, request, jsonify
 
 from src.database.artiste import Artiste
 from src.routes import auth
 from src.routes.client import devient_artiste
-
+from src.routes import oeuvre, artiste
 
 def create_app(name):
     app = Flask(name)
@@ -29,6 +30,14 @@ def create_app(name):
     def login():
         return auth.login(request)
 
+    @app.route("/oeuvre", methods=['GET'])
+    def recup_oeuvre():
+        response = {
+            "status": 200,
+            "oeuvre": oeuvre.expo(DataBase.cursor())
+        }
+        return jsonify(response)
+
     @app.route('/register', methods=['POST'])
     def register():
         return auth.register(request)
@@ -44,12 +53,35 @@ def create_app(name):
     def devenir_artiste():
         return devient_artiste(request)
 
-    @app.route("/accueil", methods=['GET'])
-    def accueil():
-        return accueil.expo(DataBase.cursor())
+    @app.route("/artiste", methods=['GET'])
+    def recup_artiste():
+        response = {
+            "status": 200,
+            "artiste": artiste.expo(DataBase.cursor())
+        }
+        return jsonify(response)
 
-    @app.route("/accueil/oeuvre", methods=['POST'])
-    def voir_type():
-        return accueil.select_oeuvres(request, DataBase.cursor())
 
+    @app.route("/search/", methods=['GET'])
+    def recherche():
+        type = request.args.get('type')
+        recherche = request.args.get('recherche')
+        if type == 'Artiste':
+            response = {
+                "status": 200,
+                "oeuvre": oeuvre.recherche_arti(recherche, DataBase.cursor())
+            }
+            return jsonify(response)
+        elif type == 'Oeuvre':
+            response = {
+                "status": 200,
+                "oeuvre": oeuvre.recherche_nom(recherche, DataBase.cursor())
+            }
+            return jsonify(response)
+        elif type == 'Type':
+            response = {
+                "status": 200,
+                "oeuvre": oeuvre.recherche_type(recherche, DataBase.cursor())
+            }
+            return jsonify(response)
     return app

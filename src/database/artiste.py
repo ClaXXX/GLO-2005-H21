@@ -37,14 +37,19 @@ class Artiste(Client):
         cursor.execute("INSERT INTO Artiste VALUE (" + courriel + ",'" + nom + "');")
         return Artiste(client, nom)
 
+    def toDict(self):
+        return {'courriel': self.courriel,'nom': self.nom}
+
+    @staticmethod
     def cherche_nom(nom,curseur):
         curseur.execute('SELECT * FROM Artiste WHERE nom=%s ;', nom)
         resultat = curseur.fetchone()
 
         if resultat is not None:
-            return Artiste(resultat[0], resultat[1])
+            return {'nom': resultat[1], 'courriel': resultat[0]}
         return None
 
+    @staticmethod
     def liste_artiste(curseur):
         curseur.execute('SELECT * FROM Artiste;')
         resultat = curseur.fetchall()
@@ -54,11 +59,11 @@ class Artiste(Client):
             return artistes
         return None
 
-
-    def imprime(liste):
-        str = ""
-        print(liste)
-        for x in liste:
-            str += x.nom + " " + x.courriel + " " + "\n"
-
-        return str
+    @staticmethod
+    def recherche(nom, curseur):
+        nom = '%' + nom + '%'
+        curseur.execute('SELECT * FROM Artiste WHERE nom  LIKE %s ;', nom)
+        resultat = curseur.fetchall()
+        if resultat is not None:
+            return [Artiste.cherche_nom(x[1], curseur) for x in resultat]
+        return None
