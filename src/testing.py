@@ -23,7 +23,7 @@ print(Oeuvre.imprime(galerie))
 
 monArtiste = Artiste.cherche_nom('lautre',curseur)
 print(monArtiste.courriel)
-mesArtistes = Artiste.liste_artiste(curseur)
+mesArtistes = Artiste.liste_artiste()
 
 print(Artiste.imprime(mesArtistes))
 

@@ -1,5 +1,6 @@
 import flask_login
 from ..database import DataBase
+from ..utils.decorateurs import sql_gestion_erreur
 
 
 class Client:
@@ -35,24 +36,26 @@ class Client:
         return self.courriel
 
     @staticmethod
-    def trouveAvecCourriel(courriel):
-        cursor = DataBase.cursor()
-        cursor.execute("SELECT * FROM Client WHERE courriel=" + courriel + ";")
-        user = cursor.fetchone()
-        return Client(user[0], user[2], user[3], user[4])
-
-    @staticmethod
-    def login(courriel, mdp):
-        cursor = DataBase.cursor()
-        cursor.execute("SELECT * FROM Client WHERE courriel=" + courriel + ";")
-        users = cursor.fetchone()
+    @sql_gestion_erreur
+    def connection(courriel, mdp, curseur=DataBase.cursor()):
+        print(courriel, mdp)
+        curseur.execute("SELECT * FROM Client WHERE courriel='%s';", courriel)
+        users = curseur.fetchone()
         if users is not None and users[1] == mdp:
             return Client(courriel, users[2], users[3], users[4])
         return None
 
     @staticmethod
-    def register(courriel, mdp, nom, prenom, adresse):
-        cursor = DataBase.cursor()
-        cursor.execute("INSERT INTO Client VALUE (" + courriel + "," + mdp
-                       + "," + nom + "," + prenom + "," + adresse + ");")
+    @sql_gestion_erreur
+    def creer(courriel, mdp, nom, prenom, adresse, curseur=DataBase.cursor()):
+        print(f"'{courriel}', '{mdp}', '{nom}', '{prenom}', '{adresse}'")
+        curseur.execute("INSERT INTO Client (courriel, mdp, nom, prenom, adresse) VALUE (%s);",
+                        f"'{courriel}', '{mdp}', '{nom}', '{prenom}', '{adresse}'")
         return Client(courriel=courriel, nom=nom, prenom=prenom, adresse=adresse)
+
+
+@sql_gestion_erreur
+def trouveAvecCourriel(courriel, curseur=DataBase.cursor()):
+    curseur.execute("SELECT * FROM Client WHERE courriel='%s';", courriel)
+    user = curseur.fetchone()
+    return Client(user[0], user[2], user[3], user[4])

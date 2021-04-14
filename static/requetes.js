@@ -1,0 +1,71 @@
+async function connection(form) {
+    return fetch(`/connection`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+    });
+}
+
+async function creer_compte(form) {
+    return fetch('/creer_compte', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+    })
+}
+
+async function deconnection() {
+    return fetch('/deconnection', { method: 'PUT' });
+}
+
+async function devenirArtiste(nom) {
+    return fetch('/artiste/devenir', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({nom})
+    })
+}
+async function fetch_oeuvre() {
+    return fetch(`/oeuvre`, {
+        method: 'GET'
+    }).then(function (response) {
+                return response.json()
+            }).then(function(data){
+                return data.oeuvre
+            })
+}
+async function fetch_artiste() {
+    return fetch(`/artiste`, {
+        method: 'GET'
+    }).then(function (response) {
+                return response.json()
+            }).then(function(data){
+                return data.artiste
+            })
+}
+
+async function rechercher(recherche, type) {
+    return fetch(`/search/?type=${type}&recherche=${recherche}`, {
+        method: 'GET'
+    }).then(function (response) {
+                return response.json()
+            }).then(function(data){
+                return data.oeuvre
+            })
+}
+
+async function creer_oeuvre(form) {
+    return fetch('/oeuvre/creer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+    })
+}

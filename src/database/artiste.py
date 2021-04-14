@@ -2,6 +2,8 @@ import copy
 
 from src.database import DataBase
 from src.database.client import Client
+from src.database.oeuvre import Oeuvre
+from src.utils.decorateurs import sql_gestion_erreur
 
 
 class Artiste(Client):
@@ -19,29 +21,31 @@ class Artiste(Client):
     def estArtiste(self):
         return True
 
+    def toDict(self):
+        return {'courriel': self.courriel,'nom': self.nom}
+
     @staticmethod
-    def trouveAvecCourriel(courriel):
-        cursor = DataBase.cursor()
-        cursor.execute("SELECT * FROM Artiste WHERE courriel=" + courriel + ";")
-        artiste = cursor.fetchone()
+    @sql_gestion_erreur
+    def trouveAvecCourriel(courriel, curseur=DataBase.cursor()):
+        curseur.execute("SELECT * FROM Artiste WHERE courriel='%s';", courriel)
+        artiste = curseur.fetchone()
         if artiste is not None:
-            return Artiste(Client.trouveAvecCourriel(courriel), artiste[1])
+            return Artiste(trouveAvecCourriel(courriel=courriel), artiste[1])
         return None
 
     @staticmethod
+    @sql_gestion_erreur
     def devient_artiste(courriel, nom):
-        client = Client.trouveAvecCourriel(courriel)
+        client = trouveAvecCourriel(courriel=courriel)
         if client is None:
             return None
         cursor = DataBase.cursor()
         cursor.execute("INSERT INTO Artiste VALUE (" + courriel + ",'" + nom + "');")
         return Artiste(client, nom)
 
-    def toDict(self):
-        return {'courriel': self.courriel,'nom': self.nom}
-
     @staticmethod
-    def cherche_nom(nom,curseur):
+    @sql_gestion_erreur
+    def cherche_nom(nom, curseur=DataBase.cursor()):
         curseur.execute('SELECT * FROM Artiste WHERE nom=%s ;', nom)
         resultat = curseur.fetchone()
 
@@ -50,7 +54,9 @@ class Artiste(Client):
         return None
 
     @staticmethod
-    def liste_artiste(curseur):
+    @sql_gestion_erreur
+    def liste_artiste():
+        curseur = DataBase.cursor()
         curseur.execute('SELECT * FROM Artiste;')
         resultat = curseur.fetchall()
 
@@ -60,6 +66,7 @@ class Artiste(Client):
         return None
 
     @staticmethod
+    @sql_gestion_erreur
     def recherche(nom, curseur):
         nom = '%' + nom + '%'
         curseur.execute('SELECT * FROM Artiste WHERE nom  LIKE %s ;', nom)

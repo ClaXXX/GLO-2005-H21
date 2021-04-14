@@ -1,0 +1,22 @@
+<div id="profile">
+    <h2 class="d-inline-flex" style="padding-top: 32px">{{artiste.nom}}</h2>
+    {% if current_user.is_authenticated %}
+        {% if artiste.courriel == current_user.courriel %}
+          <button class="btn btn-primary float-right" style="margin-top: 30px" type="button" data-toggle="modal" data-target="#oeuvre-modal">Ajouter une oeuvre</button>
+            {% include 'oeuvre/modal.html' %}
+        {% else %}
+        {% endif %}
+    {% endif %}
+    <hr/>
+    {% for oeuvre in oeuvres %}
+        <oeuvre nom="{{oeuvre.nom}}"
+          auteur="{{oeuvre.auteur}}"
+          date="{{oeuvre.dateCreation}}"
+          type="{{oeuvre.type}}"
+          description="{{oeuvre.description}}"
+                currentuser="{{oeuvre.auteur == current_user.nom}}"
+        expose="{{oeuvre.enExposition}}">
+        </oeuvre>
+    {% endfor %}
+</div>
+<script src="{{ url_for('static', filename='profile.js') }}"></script>

@@ -1,6 +1,6 @@
-
+<div id="app">
 <div id="search-container">
-  <a href="#">
+  <a href="#" class="nav-link">
     <img id="artwhale" width="42" height="42" src="{{ url_for('static', filename='assets/logo.svg') }}" alt="Artwhale Logo"/>
     <h1>Art Whale</h1>
   </a>
@@ -38,26 +38,20 @@
 
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="oeuvres" role="tabpanel" aria-labelledby="oeuvre-tab">
-      <div class="row">
-        <div v-for="oeuvre in oeuvres">
-            <oeuvre v-bind:nom="oeuvre.nom"
-              v-bind:auteur="oeuvre.auteur"
-              v-bind:dateCreation="oeuvre.date"
-              v-bind:type="oeuvre.type"
-              v-bind:description="oeuvre.description">
-            </oeuvre>
-        </div>
-      </div>
+    <oeuvre v-for="oeuvre in oeuvres" v-bind:nom="oeuvre.nom"
+      v-bind:auteur="oeuvre.auteur"
+      v-bind:date="oeuvre.dateCreation"
+      v-bind:type="oeuvre.type"
+      v-bind:description="oeuvre.description">
+    </oeuvre>
   </div>
 
   <div class="tab-pane fade" id="artistes" role="tabpanel" aria-labelledby="artiste-tab">
-      <div class="row">
-        <div v-for="artiste in artistes">
-            <artiste v-bind:nom="artiste.nom"
-                v-bind:courriel="artiste.courriel">
-            </artiste>
-        </div>
-      </div>
+    <artiste v-for="artiste in artistes" v-bind:nom="artiste.nom"
+        v-bind:courriel="artiste.courriel">
+    </artiste>
   </div>
 </div>
 
+</div>
+<script src="{{ url_for('static', filename='index.js') }}"></script>

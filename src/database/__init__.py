@@ -6,7 +6,7 @@ load_dotenv()
 
 
 class DataBase:
-    connection = connect(host=getenv('SQL_HOST'), user=getenv('SQL_USER'), password=getenv('SQL_PASSWORD'), db=getenv('SQL_DB'))
+    connection = connect(host=getenv('SQL_HOST'), user=getenv('SQL_USER'), password=getenv('SQL_PASSWORD'), db=getenv('SQL_DB'), autocommit=True)
 
     @staticmethod
     def cursor():

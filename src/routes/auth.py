@@ -1,43 +1,36 @@
-from flask_login import login_user, logout_user
-from flask import abort, flash
+from flask_login import login_user
+from flask import abort, flash, request
 
 from ..database.artiste import Artiste
 from ..database.client import Client
+from ..utils.decorateurs import retourne_dict
 
 
-def login(request):
-    if request.json is None:
-        abort(400)
-    courriel = "'" + request.json.get('courriel') + "'"
-    mdp = request.json.get('mdp')
-    if courriel is None or mdp is None:
-        return abort(400)
-    user = Client.login(courriel, mdp)
-    if user is not None:
-        artiste = Artiste.trouveAvecCourriel(courriel)
-        if artiste is not None:
-            login_user(artiste)
-        else:
-            login_user(user)
-
-        flash('Logged in successfully.')
-
-        return {}, 200
-    return {'message': "Informations invalides!"}, 400
+@retourne_dict
+def connection():
+    user = Client.connection(courriel=request.json.get('courriel'),
+                             mdp=request.json.get('mdp'))
+    print(user)
+    if user is None:
+        abort(400, {'message': "Informations invalides!"})
+    artiste = Artiste.trouveAvecCourriel(courriel=user.courriel)
+    if artiste is not None:
+        print(artiste)
+        login_user(artiste)
+        flash('Connection réussie. Connecté en tant que artiste')
+    else:
+        login_user(user)
+        flash('Connection réussie. Connecté en tant que client')
+    return user
 
 
-def register(request):
-    courriel = "'" + request.json.get('courriel') + "'"
-    mdp = "'" + request.json.get('mdp') + "'"
-    nom = "'" + request.json.get('nom') + "'"
-    prenom = "'" + request.json.get('prenom') + "'"
-    adresse = "'" + request.json.get('adresse') + "'"
-    if courriel is None or mdp is None:
-        return abort(400)
-    user = Client.register(courriel=courriel, mdp=mdp, nom=nom, prenom=prenom, adresse=adresse)
+@retourne_dict
+def creer_compte():
+    user = Client.creer(courriel=request.json.get('courriel'),
+                        mdp=request.json.get('mdp'),
+                        nom=request.json.get('nom'),
+                        prenom=request.json.get('prenom'),
+                        adresse=request.json.get('adresse'))
+    flash('Création de compte réussie')
     login_user(user)
-    return user.getDict(), 201
-
-
-def logout():
-    logout_user()
+    return user

@@ -1,37 +1,3 @@
-async function login(form) {
-    return fetch(`/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(form)
-    });
-}
-
-async function regiser(form) {
-    return fetch('/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(form)
-    })
-}
-
-async function logout() {
-    return fetch('/logout', { method: 'POST' });
-}
-
-async function devenirArtiste(nom) {
-    return fetch('/artiste/devenir', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({nom})
-    })
-}
-
 const loginApp = new Vue({
     data: {
         loginForm: {
@@ -56,11 +22,11 @@ const loginApp = new Vue({
         devientArtiste: function (event) {
             event.preventDefault();
             devenirArtiste(this.artisteForm.nom)
-                .then(()=> window.location.reload());
+                .then(() => window.location.reload());
         },
         onLogin: function (event) {
             event.preventDefault();
-            login(this.loginForm)
+            connection(this.loginForm)
                 .then(res => {
                     console.log(res);
                     if (res.status === 200)
@@ -72,7 +38,7 @@ const loginApp = new Vue({
             if (this.registerForm.mdp !== this.registerForm.mdpConfirmation)
                 return;
             delete this.registerForm.mdpConfirmation;
-            regiser(this.registerForm).then(res => {
+            creer_compte(this.registerForm).then(res => {
                 if (res.status === 201)
                     location.reload();
             })
@@ -80,7 +46,7 @@ const loginApp = new Vue({
         },
         onLogout: function (event) {
             event.preventDefault();
-            logout().then(window.location.reload);
+            deconnection().then(window.location.reload);
         }
     }
 })

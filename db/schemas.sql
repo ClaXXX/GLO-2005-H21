@@ -42,8 +42,6 @@ CREATE TABLE IF NOT EXISTS Commande(
         REFERENCES Oeuvre(nom),
     FOREIGN KEY(superviseur)
         REFERENCES Artiste(nom),
-    FOREIGN KEY(oeuvre)
-        REFERENCES Oeuvre(nom),
     FOREIGN KEY(demandeur)
         REFERENCES Client(courriel)
             ON DELETE NO ACTION
