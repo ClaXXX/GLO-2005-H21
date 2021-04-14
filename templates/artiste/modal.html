@@ -1,0 +1,23 @@
+<div class="modal fade" id="artiste-modal" tabindex="-1" role="dialog" aria-labelledby="connexion-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h5 class="modal-title">Choisissez votre nom d'artiste</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="col-12 container-padding">
+            <form id="artisteForm" v-on:submit.prevent="devientArtiste($event)">
+              <div class="form-group">
+                  <input class="form-control input-lg" type="text" autocomplete="name" id="nom" name="nom"
+                         placeholder="Nom d'artiste" v-model="artisteForm.nom" maxlength="32" required>
+              </div>
+              <input class="btn btn-primary btn-block btn-lg" type="submit" value="Devenir Artiste">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

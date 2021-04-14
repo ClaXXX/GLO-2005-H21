@@ -23,9 +23,12 @@ const vueApp = new Vue({
                 this.artistes.push({nom: artiste.nom})
             }
         },
-        onSearch: async function(event){
+        onSearch: function(event){
             event.preventDefault();
-            await rechercher(this.recherche,this.type_recherche).then(res=>console.log(res));
+            rechercher(this.recherche,this.type_recherche).then(res => {
+                this.oeuvres = res.map(oeuvre => ({nom: oeuvre.nom, auteur: oeuvre.auteur,dateCreation: oeuvre.dateCreation,type:oeuvre.type,description:oeuvre.desc}))
+                this.artistes = res.map(oeuvre=> ({nom: oeuvre.auteur}))
+            });
         }
 
     }

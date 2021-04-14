@@ -6,10 +6,10 @@ from src.database.oeuvre import Oeuvre
 
 def ajoute_oeuvre():
     en_exposition = request.json.get('enExposition')
-    if en_exposition is None or en_exposition == "False":
-        en_exposition = False
-    else:
+    if en_exposition is not None and en_exposition:
         en_exposition = True
+    else:
+        en_exposition = False
     return Oeuvre.ajoute(nom=request.json.get('nom'), auteur=flask_login.current_user.nomArtiste,
                          dateCreation=request.json.get('dateCreation'), type=request.json.get('type'),
                          description=request.json.get('description'), enExposition=en_exposition)

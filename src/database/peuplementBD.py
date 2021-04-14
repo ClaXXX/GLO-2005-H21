@@ -8,6 +8,7 @@ import string
 from dateutil.relativedelta import *
 import datetime
 import lorem
+from passlib.hash import sha256_crypt
 
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
@@ -16,13 +17,12 @@ pd.set_option('display.max_colwidth', -1)
 
 # Connection à la bd pour peupler les tables
 load_dotenv()
-db = DataBase('localhost', 'root', 'xZic5E%7', 'tp')
+db = DataBase()
 curseur = db.cursor()
 
 def peupler(df, nom_table):
     cols = ",".join([str(i) for i in df.columns.tolist()])  # str des attributs à insérer dans la déclaration SQL
     for i, rang in df.iterrows():
-        #print(i)
         cmd = "INSERT INTO "+ nom_table+" (" + cols + " ) VALUES (" + "%s," * (len(rang) - 1) + "%s)"
         curseur.execute(cmd, tuple(rang))
 
@@ -35,7 +35,8 @@ def gen_MP():
     lettres = string.ascii_letters
     chiffres = string.digits
     chars = lettres + chiffres
-    mdp = "".join(random.choice(chars) for x in range(random.randint(16, 32)))
+    mdp = "".join(random.choice(chars) for x in range(random.randint(3,4)))
+    print(mdp)
     return mdp
 
 # création d'un dataframe Client via lecture du fichier .csv contenant noms accentués
@@ -50,10 +51,11 @@ df = df.assign(courriel = df['prenom'] + '.' + df['nom'])
 df['courriel'] =df['courriel'].apply(lambda x: uni.unidecode(x.lower()) + '@gmail.com') #création du courriel sans accents et en minuscule
 
 #Création de la colonne mdp
-df = df.assign(mdp=[gen_MP() for x in range(len(df))])
+df = df.assign(mdp=[sha256_crypt.hash(gen_MP()) for x in range(len(df))])
 
 #Peuplement de la table Client
 peupler(df,'Client')
+
 
 
 """
@@ -106,7 +108,7 @@ def prix_cmd():
     return prix
 
 #Création du dataframe Commande
-df_cmd = pd.DataFrame(columns =['superviseur','oeuvre','demandeur','statut','prix','type'], index=range(150))
+df_cmd = pd.DataFrame(columns =['superviseur','oeuvre','demandeur','statut','prix','type','adresseLivraison'], index=range(150))
 df_cmd['superviseur'].iloc[:100,] = df_oeu['auteur'].iloc[:100,].copy()
 df_cmd['superviseur'].iloc[100:150,] = df_oeu['auteur'].iloc[:50,].copy()
 df_cmd['oeuvre'] = df_oeu['nom'].iloc[:126,].copy()
@@ -119,6 +121,9 @@ df_cmd['statut'].iloc[126:150,] = ['En cours']*24
 df_cmd['prix'] = [prix_cmd() for x in range(len(df_cmd))]
 df_cmd['type'].iloc[:126,] = ['Réservation']*126
 df_cmd['type'].iloc[126:150,] = ['Création']*24
+df_cmd['adresseLivraison'].iloc[:100] = df['adresse'].iloc[100:200].copy()
+df_cmd['adresseLivraison'].iloc[100:150] = df['adresse'].iloc[100:150].copy()
+
 
 #Peuplement de la table commande
 peupler(df_cmd,'Commande')
@@ -146,16 +151,12 @@ peupler(df_com,'Commentaire')
 """
 Création et peuplement de la table Facture
 """
-def gen_adresse():
-    texte = lorem.get_sentence(count=1, comma=(0, 1), word_range=(2,3 ))
-    return texte
 
-df_fac = pd.DataFrame(columns =['numCommande','adresseLivraison','adresseFacturation','total'], index=range(100))
-df_fac['numCommande'].iloc[:50,] = [x+51 for x in range(50)]
-df_fac['adresseLivraison'].iloc[:50,] = [gen_adresse() for x in range(50)]
-df_fac['numCommande'].iloc[50:100,] = [x+51 for x in range(50)]
-df_fac['adresseLivraison'].iloc[50:100,] = df_fac['adresseLivraison'].iloc[0:50].copy()
-df_fac['adresseFacturation']= df_fac['adresseLivraison'].copy()
+df_fac = pd.DataFrame(columns =['numCommande','adresseFacturation','total'], index=range(100))
+df_fac['numCommande'].iloc[:50,] = [x+50 for x in range(50)]
+df_fac['numCommande'].iloc[50:100,] = [x+50 for x in range(50)]
+df_fac['adresseFacturation'].iloc[:50,]= df_cmd['adresseLivraison'].iloc[50:100,].copy()
+df_fac['adresseFacturation'].iloc[50:100,]= df_cmd['adresseLivraison'].iloc[50:100,].copy()
 df_fac['total'].iloc[:50,] = 0.5*(df_cmd['prix'].iloc[50:100,].copy())
 df_fac['total'].iloc[50:100,] = 0.5*(df_cmd['prix'].iloc[50:100,].copy())
 

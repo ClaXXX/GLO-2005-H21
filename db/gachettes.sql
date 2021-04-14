@@ -1,4 +1,4 @@
-USE tp;
+USE venteart;
 
 -- Contrainte de spécialisation
 DELIMITER //
@@ -35,7 +35,7 @@ CREATE TRIGGER commentaireAuteur
     FOR EACH ROW
     BEGIN
         IF NEW.auteur NOT IN (SELECT C.demandeur FROM Commande C WHERE C.num = NEW.numCommande) -- Si l'auteur du commentaire est le demandeur
-            AND NEW.auteur NOT IN (SELECT A.courriel FROM Commande C, Artiste A WHERE NEW.numCommande = C.num AND A.nom = C.superviseur) -- Si l'auteur du commentaire est le superviseur
+            AND NEW.auteur NOT IN (SELECT A.courriel FROM Commande C, Artiste A WHERE NEW.numCommande = C.num AND C.superviseur = A.nom) -- Si l'auteur du commentaire est le superviseur
         THEN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Ajout du commentaire interdit: auteur invalide';
@@ -75,10 +75,22 @@ DELIMITER ;
 -- Création d'un tuple oeuvre lorsqu'une commande de type Création est passée
 DELIMITER //
 CREATE TRIGGER nouvOeuvre
+    BEFORE UPDATE ON Commande
+    FOR EACH ROW
+    BEGIN
+        IF  OLD.oeuvre IS NULL AND NEW.oeuvre IS NOT NULL AND NEW.oeuvre NOT IN (SELECT O.nom FROM Oeuvre O) AND NEW.type = 'création'
+        THEN
+            INSERT INTO Oeuvre(nom,auteur) VALUES (NEW.oeuvre, NEW.superviseur);
+                END IF;
+        END;//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER insertOeuvre
     BEFORE INSERT ON Commande
     FOR EACH ROW
     BEGIN
-        IF  NEW.oeuvre  NOT IN (SELECT O.nom FROM Oeuvre O) AND NEW.type = 'création'
+        IF  NEW.oeuvre IS NOT NULL  AND NEW.oeuvre NOT IN (SELECT O.nom FROM Oeuvre O) AND NEW.type = 'création'
         THEN
             INSERT INTO Oeuvre(nom,auteur) VALUES (NEW.oeuvre, NEW.superviseur);
                 END IF;

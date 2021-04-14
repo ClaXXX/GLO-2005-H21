@@ -6,6 +6,7 @@ from src.database import DataBase, client
 from flask import render_template, request, jsonify
 
 from src.database.artiste import Artiste
+from src.database.client import Client
 from src.database.commande import Commande
 from src.database.commentaire import Commentaire
 from src.database.oeuvre import Oeuvre
@@ -27,7 +28,7 @@ def create_app(name):
         artiste = Artiste.trouveAvecCourriel(courriel=courriel)
         if artiste is not None:
             return artiste
-        return trouveAvecCourriel(courriel=courriel)
+        return Client.trouveAvecCourriel(courriel=courriel)
 
     # pages
     @app.route("/")

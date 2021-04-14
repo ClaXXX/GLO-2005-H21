@@ -46,7 +46,7 @@ const loginApp = new Vue({
         },
         onLogout: function (event) {
             event.preventDefault();
-            deconnection().then(window.location.reload);
+            deconnection().then(() => window.location.reload());
         }
     }
 })

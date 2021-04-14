@@ -27,20 +27,20 @@ class Artiste(Client):
     @staticmethod
     @sql_gestion_erreur
     def trouveAvecCourriel(courriel, curseur=DataBase.cursor()):
-        curseur.execute("SELECT * FROM Artiste WHERE courriel='%s';", courriel)
+        curseur.execute('SELECT * FROM Artiste WHERE courriel=%s ;',courriel)
         artiste = curseur.fetchone()
         if artiste is not None:
-            return Artiste(trouveAvecCourriel(courriel=courriel), artiste[1])
+            return Artiste(Client.trouveAvecCourriel(courriel=courriel), artiste[1])
         return None
 
     @staticmethod
     @sql_gestion_erreur
     def devient_artiste(courriel, nom):
-        client = trouveAvecCourriel(courriel=courriel)
+        client = Client.trouveAvecCourriel(courriel=courriel)
         if client is None:
             return None
         cursor = DataBase.cursor()
-        cursor.execute("INSERT INTO Artiste VALUE (" + courriel + ",'" + nom + "');")
+        cursor.execute('INSERT INTO Artiste VALUE (%s, %s);',(courriel,nom))
         return Artiste(client, nom)
 
     @staticmethod
@@ -72,5 +72,5 @@ class Artiste(Client):
         curseur.execute('SELECT * FROM Artiste WHERE nom  LIKE %s ;', nom)
         resultat = curseur.fetchall()
         if resultat is not None:
-            return [Artiste.cherche_nom(x[1], curseur) for x in resultat]
+            return [Artiste.cherche_nom(x[0],x[1]).toDict() for x in resultat]
         return None
