@@ -3,7 +3,7 @@ USE tp;
 
 CREATE TABLE IF NOT EXISTS Client(
     courriel varchar(64) PRIMARY KEY,
-    mdp varchar(32) NOT NULL,
+    mdp varchar(256) NOT NULL,
     nom varchar(32),
     prenom varchar(32),
     adresse varchar(64)
@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS Commande(
     statut enum('En cours', 'Complétée', 'En attente de confirmation', 'Annulée') DEFAULT 'En cours',
     prix double(6,2),
     type enum('Création', 'Réservation') NOT NULL,
+    adresseLivraison varchar(64),
     FOREIGN KEY(oeuvre)
         REFERENCES Oeuvre(nom),
     FOREIGN KEY(superviseur)
@@ -53,7 +54,6 @@ CREATE TABLE IF NOT EXISTS Commande(
 CREATE TABLE IF NOT EXISTS Facture(
     numFacture integer AUTO_INCREMENT PRIMARY KEY,
     numCommande integer NOT NULL,
-    adresseLivraison varchar(64) NOT NULL,
     adresseFacturation varchar(64) NOT NULL,
     total double(6,2) NOT NULL,
     FOREIGN KEY(numCommande)

@@ -29,7 +29,7 @@ class Oeuvre:
         resultat = curseur.fetchall()
 
         if resultat is not None:
-            liste_oeuvre = [Oeuvre.cherche_db(x[0],curseur).toDict() for x in resultat]
+            liste_oeuvre = [Oeuvre(x[0],x[1],x[2],x[3],x[4],x[5]).toDict() for x in resultat]
             return liste_oeuvre
         return None
 
@@ -40,7 +40,7 @@ class Oeuvre:
         resultat = curseur.fetchall()
 
         if resultat is not None:
-            oeuvres = [Oeuvre.cherche_db(x[0], curseur).toDict() for x in resultat]
+            oeuvres = [Oeuvre(x[0],x[1],x[2],x[3],x[4],x[5]).toDict() for x in resultat]
             return oeuvres
         return None
 
@@ -50,7 +50,7 @@ class Oeuvre:
         resultat = curseur.fetchall()
 
         if resultat is not None:
-            galerie = [Oeuvre.cherche_db(x[0],curseur).toDict() for x in resultat]
+            galerie = [Oeuvre(x[0],x[1],x[2],x[3],x[4],x[5]).toDict() for x in resultat]
             return galerie
         return None
 
@@ -60,6 +60,6 @@ class Oeuvre:
         curseur.execute('SELECT * FROM Oeuvre WHERE nom LIKE %s AND enExposition=1;', nom)
         resultat = curseur.fetchall()
         if resultat is not None:
-            return [Oeuvre.cherche_db(x[0], curseur).toDict() for x in resultat]
+            return [Oeuvre(x[0],x[1],x[2],x[3],x[4],x[5]).toDict() for x in resultat]
         return None
 

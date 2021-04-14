@@ -37,14 +37,14 @@ class Client:
     @staticmethod
     def trouveAvecCourriel(courriel):
         cursor = DataBase.cursor()
-        cursor.execute("SELECT * FROM Client WHERE courriel=" + courriel + ";")
+        cursor.execute('SELECT * FROM Client WHERE courriel=%s;',courriel)
         user = cursor.fetchone()
         return Client(user[0], user[2], user[3], user[4])
 
     @staticmethod
     def login(courriel, mdp):
         cursor = DataBase.cursor()
-        cursor.execute("SELECT * FROM Client WHERE courriel=" + courriel + ";")
+        cursor.execute('SELECT * FROM Client WHERE courriel=%s;',courriel)
         users = cursor.fetchone()
         if users is not None and users[1] == mdp:
             return Client(courriel, users[2], users[3], users[4])
@@ -53,6 +53,5 @@ class Client:
     @staticmethod
     def register(courriel, mdp, nom, prenom, adresse):
         cursor = DataBase.cursor()
-        cursor.execute("INSERT INTO Client VALUE (" + courriel + "," + mdp
-                       + "," + nom + "," + prenom + "," + adresse + ");")
+        cursor.execute('INSERT INTO Client VALUE (%s, %s, %s, %s, %s);',(courriel, mdp, nom, prenom, adresse))
         return Client(courriel=courriel, nom=nom, prenom=prenom, adresse=adresse)

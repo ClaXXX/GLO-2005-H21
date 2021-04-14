@@ -22,7 +22,7 @@ class Artiste(Client):
     @staticmethod
     def trouveAvecCourriel(courriel):
         cursor = DataBase.cursor()
-        cursor.execute("SELECT * FROM Artiste WHERE courriel=" + courriel + ";")
+        cursor.execute('SELECT * FROM Artiste WHERE courriel=%s ;',courriel)
         artiste = cursor.fetchone()
         if artiste is not None:
             return Artiste(Client.trouveAvecCourriel(courriel), artiste[1])
@@ -34,7 +34,7 @@ class Artiste(Client):
         if client is None:
             return None
         cursor = DataBase.cursor()
-        cursor.execute("INSERT INTO Artiste VALUE (" + courriel + ",'" + nom + "');")
+        cursor.execute('INSERT INTO Artiste VALUE (%s, %s);',(courriel,nom))
         return Artiste(client, nom)
 
     def toDict(self):
@@ -55,7 +55,7 @@ class Artiste(Client):
         resultat = curseur.fetchall()
 
         if resultat is not None:
-            artistes = [Artiste.cherche_nom(x[1], curseur) for x in resultat]
+            artistes = [Artiste(x[0],x[1]).toDict() for x in resultat]
             return artistes
         return None
 
@@ -65,5 +65,5 @@ class Artiste(Client):
         curseur.execute('SELECT * FROM Artiste WHERE nom  LIKE %s ;', nom)
         resultat = curseur.fetchall()
         if resultat is not None:
-            return [Artiste.cherche_nom(x[1], curseur) for x in resultat]
+            return [Artiste(x[0],x[1]).toDict() for x in resultat]
         return None
