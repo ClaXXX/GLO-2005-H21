@@ -4,20 +4,8 @@ from dotenv import load_dotenv
 from src.database.oeuvre import Oeuvre
 from src.database.artiste import Artiste
 load_dotenv()
-db = DataBase(getenv('SQL_HOST'), getenv('SQL_USER'), getenv('SQL_PASSWORD'), getenv('SQL_DB'))
+db = DataBase()
 curseur = db.cursor()
-
-monOeuvre = Oeuvre.cherche_nom('La famille',curseur)
-#print(monOeuvre)
-#print(monOeuvre.dateCreation)
-
-peintures = Oeuvre.tri_oeuvre('Peinture huile',curseur)
-galerie = Oeuvre.exposition_totale(curseur)
-#print(galerie)
-
-oeuvres = Oeuvre.oeuvre_parArtiste('lautre',curseur)
-#print(oeuvres)
-
 
 
 monArtiste = Artiste.cherche_nom('lautre',curseur)
@@ -26,15 +14,25 @@ monArtiste = Artiste.cherche_nom('lautre',curseur)
 #mesArtistes = Artiste.liste_artiste(curseur)
 
 
-def recherche(nom, curseur):
-    curseur.execute('SELECT * FROM Artiste WHERE nom =%s ;', nom)
+def cherche_nom(nom, curseur=DataBase.cursor()):
+    curseur.execute('SELECT * FROM Artiste WHERE nom=%s ;', nom)
     resultat = curseur.fetchone()
-    if resultat is not None:
-        return Artiste(resultat[0], resultat[1]).toDict()
-    return None
 
-rech = recherche('lautre',curseur)
+    if resultat is not None:
+        return {'nom': resultat[1], 'courriel': resultat[0]}
+    return None
+rech = cherche_nom('alblap',curseur)
 #print(rech)
+
+
+def pour_artiste(nom):
+    curseur = DataBase.cursor()
+    curseur.execute("SELECT * FROM Oeuvre WHERE auteur=%s;", nom)
+    resultat = curseur.fetchall()
+    if resultat is not None:
+        print([(x[0], x[1], x[2], x[3], x[4], x[5]) for x in resultat])
+        return [Oeuvre(x[0], x[1], x[2], x[3], x[4], x[5]).toDict() for x in resultat]
+print(pour_artiste('alblap'))
 
 
 nomArti = 'alblap'
@@ -46,7 +44,7 @@ def rechercheArti(nomArti, curseur):
         return [Oeuvre.cherche_nom(x[0], curseur).toDict() for x in resultat]
     return None
 
-print(rechercheArti(nomArti, curseur))
+#print(rechercheArti(nomArti, curseur))
 
 name = "Les Gouffres de l'esprit no 10"
 def recherche(nom, curseur):
@@ -56,4 +54,4 @@ def recherche(nom, curseur):
     if resultat is not None:
         return [Oeuvre.cherche_nom(x[0], curseur).toDict() for x in resultat]
     return None
-print(recherche(name,curseur))
+#print(recherche(name,curseur))

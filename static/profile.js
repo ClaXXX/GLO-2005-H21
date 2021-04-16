@@ -20,6 +20,23 @@ const profileApp = new Vue({
                     if (res.status === 201)
                         window.location.reload()
                 })
+        },
+        supprimeOeuvre: function (event,auteur,nom) {
+            event.preventDefault();
+            supprimer_oeuvre(nom, auteur)
+                .then(res => {
+                    if (res.status === 201)
+                        window.location.reload()
+                })
+        },
+        finCompteArti: function(event){
+            event.preventDefault();
+            fermerArtiste()
+                .then(res => {
+                    if (res.status === 200)
+                        window.location.reload()
+                })
         }
+
     }
 })

@@ -9,6 +9,9 @@ def devient_artiste(request):
     return Artiste.devient_artiste(courriel=flask_login.current_user.courriel,
                                       nom=request.json.get('nom'))
 
+def fin_artiste():
+    return Artiste.fin_carriere(courriel=flask_login.current_user.courriel)
+
 
 def expo(curseur):
     return Artiste.liste_artiste()

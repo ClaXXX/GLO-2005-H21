@@ -131,3 +131,4 @@ dmypy.json
 
 #Test Vincent
 test/testsManuels_ClientsArtistes.sql
+testing.py

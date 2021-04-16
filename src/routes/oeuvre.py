@@ -14,6 +14,8 @@ def ajoute_oeuvre():
                          dateCreation=request.json.get('dateCreation'), type=request.json.get('type'),
                          description=request.json.get('description'), enExposition=en_exposition)
 
+def supprime_oeuvre():
+    return Oeuvre.supprime(nom=request.json.get('nom'), auteur=flask_login.current_user.nomArtiste)
 
 def expo(curseur):
     return Oeuvre.exposition_totale(curseur)

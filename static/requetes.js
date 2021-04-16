@@ -31,6 +31,12 @@ async function devenirArtiste(nom) {
         body: JSON.stringify({nom})
     })
 }
+async function fermerArtiste() {
+    return fetch('/artiste/finir', {
+        method: 'DELETE',
+    })
+}
+
 async function fetch_oeuvre() {
     return fetch(`/oeuvre`, {
         method: 'GET'
@@ -67,5 +73,14 @@ async function creer_oeuvre(form) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(form)
+    })
+}
+async function supprimer_oeuvre(nom,auteur) {
+    return fetch('/oeuvre/supprimer', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({nom,auteur},)
     })
 }

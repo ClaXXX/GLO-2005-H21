@@ -18,11 +18,11 @@
         </div>
         <div class="form-group">
             <input class="form-control input-lg" type="password" autocomplete="new-password" id="nouveauMdp" name="nouveauMdp"
-                   placeholder="Mot de passe" minlength="4" maxlength="32" v-model="registerForm.mdp" required>
+                   placeholder="Mot de passe" minlength="3" maxlength="32" v-model="registerForm.mdp" required>
         </div>
         <div class="form-group">
             <input class="form-control input-lg" type="password" autocomplete="new-password" id="confirmNouveauMdp"
-                   name="confirmNouveauMdp" placeholder="Confirme mot de passe" minlength="4" maxlength="32" v-model="registerForm.mdpConfirmation" required>
+                   name="confirmNouveauMdp" placeholder="Confirme mot de passe" minlength="3" maxlength="32" v-model="registerForm.mdpConfirmation" required>
         </div>
         <input class="btn btn-primary btn-block btn-lg" type="submit" value="Register">
         <span id="registerError" class="error" aria-live="polite"></span>

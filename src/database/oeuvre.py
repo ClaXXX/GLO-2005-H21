@@ -10,11 +10,22 @@ class Oeuvre:
     def __init__(self, nom, auteur, dateCreation, type, desc, enExpo):
         self.nom = nom
         self.auteur = auteur
-        self.dateCreation = dateCreation.strftime("%Y-%b-%d")
-
-        self.type = type
-        self.desc = desc
-        self.enExpo = enExpo
+        if dateCreation is None:
+            self.dateCreation = 'Non définie'
+        else:
+            self.dateCreation = dateCreation.strftime("%Y-%b-%d")
+        if type is None:
+            self.type = 'Type non défini'
+        else:
+            self.type = type
+        if desc is None:
+            self.desc = 'Aucune description'
+        else:
+            self.desc = desc
+        if enExpo is None:
+            self.enExpo = 0
+        else:
+            self.enExpo = enExpo
 
     def toDict(self):
         return {'nom': self.nom, 'auteur': self.auteur,'dateCreation':self.dateCreation,'type':self.type,'desc':self.desc, 'enExposition':self.enExpo}
@@ -26,6 +37,13 @@ class Oeuvre:
         cursor = DataBase.cursor()
         cursor.execute(f"INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) VALUE {oeuvre}"
                        .format(oeuvre=oeuvre))
+        return {}
+
+    @staticmethod
+    @sql_gestion_erreur
+    def supprime(nom, auteur):
+        cursor = DataBase.cursor()
+        cursor.execute('DELETE FROM Oeuvre WHERE nom = %s AND auteur = %s',(nom,auteur))
         return {}
 
     @staticmethod

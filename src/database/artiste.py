@@ -45,6 +45,14 @@ class Artiste(Client):
 
     @staticmethod
     @sql_gestion_erreur
+    def fin_carriere(courriel):
+        cursor = DataBase.cursor()
+        cursor.execute('DELETE FROM Artiste WHERE courriel=%s;',courriel)
+        return {}
+
+
+    @staticmethod
+    @sql_gestion_erreur
     def cherche_nom(nom, curseur=DataBase.cursor()):
         curseur.execute('SELECT * FROM Artiste WHERE nom=%s ;', nom)
         resultat = curseur.fetchone()

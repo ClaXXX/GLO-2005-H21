@@ -74,6 +74,13 @@ def create_app(name):
     def devenir_artiste():
         return devient_artiste(request), 201
 
+    @app.route('/artiste/finir', methods=['DELETE'])
+    @doit_etre_artiste
+    def finir_artiste():
+        return artiste.fin_artiste(), 200
+
+
+
     @app.route("/artiste", methods=['GET'])
     def recup_artiste():
         response = {
@@ -96,6 +103,14 @@ def create_app(name):
     @doit_etre_artiste
     def creer_oeuvre():
         return oeuvre.ajoute_oeuvre(), 201
+
+    @app.route("/oeuvre/supprimer", methods=['DELETE'])
+    @valide_json('nom', 'auteur')
+    @doit_etre_artiste
+    def supprimer_oeuvre():
+        return oeuvre.supprime_oeuvre(), 200
+
+
 
     @app.route("/search/", methods=['GET'])
     def recherche():

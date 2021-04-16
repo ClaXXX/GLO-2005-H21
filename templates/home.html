@@ -7,12 +7,12 @@
   <br/>
     <form action="#" method="get" id="searchForm" class="input-group" v-on:submit.prevent="onSearch($event)">
         <div class="input-group-btn search-panel" >
-            <select class="btn btn-default dropdown-toggle" v-model="type_recherche" >
+            <select class="btn btn-default dropdown-toggle" v-model="type_recherche" placeholder="Chercher..">
                 <option value="Artiste">Oeuvre par artiste</option>
                 <option value="Oeuvre">Oeuvre par nom</option>
                 <option value="Type">Oeuvre par type</option>
             </select>
-        </div>
+
         <div class="input-group rounded">
             <input type="search" class="form-control rounded" placeholder="Recherche" aria-label="Search" aria-describedby="search-addon" id = "recherche" name = "recherche" minlength="3" maxlength="32" v-model="recherche"/>
             <div class="input-group-append border-0" id="search-addon">
@@ -22,6 +22,7 @@
                     </svg>
                 </button>
             </div>
+        </div>
         </div>
     </form>
 </div>
