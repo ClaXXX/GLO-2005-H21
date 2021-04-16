@@ -41,17 +41,20 @@ class Client:
     @staticmethod
     @sql_gestion_erreur
     def connection(courriel, mdp, curseur=DataBase.cursor()):
-        curseur.execute('SELECT * FROM Client WHERE courriel=%s;', courriel)
+        curseur.execute('SELECT U.mdp FROM Utilisateur U WHERE courriel=%s;', courriel)
         users = curseur.fetchone()
         if users is not None and \
-                sha256_crypt.verify(mdp, users[1]):
-            return Client(courriel, users[2], users[3], users[4])
+                sha256_crypt.verify(mdp, users[0]):
+            curseur.execute('SELECT c.nom, c.prenom, c.adresse FROM Client c WHERE courriel=%s', courriel)
+            users = curseur.fetchone()
+            return Client(courriel, users[0], users[1], users[2])
         return None
 
     @staticmethod
     @sql_gestion_erreur
     def creer(courriel, mdp, nom, prenom, adresse, curseur=DataBase.cursor()):
-        curseur.execute('INSERT INTO Client VALUE (%s, %s, %s, %s, %s);', (courriel, sha256_crypt.hash(mdp), nom, prenom, adresse))
+        curseur.execute('INSERT INTO Client VALUE (%s, %s, %s, %s);', (courriel, nom, prenom, adresse))
+        curseur.execute('INSERT INTO Utilisateur VALUE (%s, %s);', (courriel, sha256_crypt.hash(mdp)))
         return Client(courriel=courriel, nom=nom, prenom=prenom, adresse=adresse)
 
     @staticmethod
@@ -59,4 +62,4 @@ class Client:
     def trouveAvecCourriel(courriel, curseur=DataBase.cursor()):
         curseur.execute("SELECT * FROM Client WHERE courriel=%s;", courriel)
         user = curseur.fetchone()
-        return Client(user[0], user[2], user[3], user[4])
+        return Client(user[0], user[1], user[2], user[3])

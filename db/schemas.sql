@@ -1,12 +1,20 @@
-CREATE DATABASE IF NOT EXISTS tp DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE tp;
+CREATE DATABASE IF NOT EXISTS venteart DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE venteart;
 
 CREATE TABLE IF NOT EXISTS Client(
     courriel varchar(64) PRIMARY KEY,
-    mdp varchar(256) NOT NULL,
     nom varchar(32),
     prenom varchar(32),
     adresse varchar(64)
+);
+
+CREATE TABLE IF NOT EXISTS Utilisateur(
+    courriel varchar(64) PRIMARY KEY,
+    mdp varchar(256) NOT NULL,
+    FOREIGN KEY(courriel)
+        REFERENCES Client(courriel)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Artiste(
@@ -17,7 +25,6 @@ CREATE TABLE IF NOT EXISTS Artiste(
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
-
 CREATE TABLE IF NOT EXISTS Oeuvre(
     nom varchar(64) NOT NULL,
     auteur varchar(32) NOT NULL,
@@ -29,7 +36,6 @@ CREATE TABLE IF NOT EXISTS Oeuvre(
     FOREIGN KEY (auteur)
         REFERENCES Artiste(nom)
 );
-
 CREATE TABLE IF NOT EXISTS Commande(
     num integer AUTO_INCREMENT PRIMARY KEY,
     oeuvre varchar(64),
@@ -48,7 +54,6 @@ CREATE TABLE IF NOT EXISTS Commande(
             ON DELETE NO ACTION
             ON UPDATE CASCADE
 );
-
 CREATE TABLE IF NOT EXISTS Facture(
     numFacture integer AUTO_INCREMENT PRIMARY KEY,
     numCommande integer NOT NULL,
@@ -57,7 +62,6 @@ CREATE TABLE IF NOT EXISTS Facture(
     FOREIGN KEY(numCommande)
         REFERENCES Commande(num)
 );
-
 CREATE TABLE IF NOT EXISTS Commentaire(
     id integer AUTO_INCREMENT PRIMARY KEY,
     auteur varchar(64) NOT NULL,

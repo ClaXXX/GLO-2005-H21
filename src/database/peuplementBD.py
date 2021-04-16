@@ -51,11 +51,13 @@ df = df.assign(courriel = df['prenom'] + '.' + df['nom'])
 df['courriel'] =df['courriel'].apply(lambda x: uni.unidecode(x.lower()) + '@gmail.com') #création du courriel sans accents et en minuscule
 
 #Création de la colonne mdp
-df = df.assign(mdp=[sha256_crypt.hash(gen_MP()) for x in range(len(df))])
 
 #Peuplement de la table Client
 peupler(df,'Client')
 
+df_u = df[['courriel']].copy()
+df_u = df_u.assign(mdp=[sha256_crypt.hash(gen_MP()) for x in range(len(df_u))])
+peupler(df_u,'Utilisateur')
 
 
 """
