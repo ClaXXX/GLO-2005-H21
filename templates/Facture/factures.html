@@ -1,0 +1,26 @@
+<div id="commandes">
+ <h2 class="d-inline-flex" style="padding-top: 32px">Sommaire des factures</h2>
+    <hr/>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"># Facture</th>
+          <th scope="col"># Commande</th>
+          <th scope="col">Adresse de facturation</th>
+          <th scope="col">Total [CAD]</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for facture in factures %}
+        <tr>
+          <th scope="row">{{facture.numF}}</th>
+          <td>{{facture.numC}}</td>
+          <td>{{facture.adresse}}</td>
+          <td>{{facture.total}}</td>
+        </tr>
+
+      {% endfor %}
+      </tbody>
+    </table>
+<script src="{{ url_for('static', filename='factures.js') }}"></script>
+</div>

@@ -10,8 +10,9 @@ from src.database.client import Client
 from src.database.commande import Commande
 from src.database.commentaire import Commentaire
 from src.database.oeuvre import Oeuvre
+from src.database.facture import Facture
 from src.routes import auth
-from src.routes import oeuvre, artiste
+from src.routes import oeuvre, artiste, facture
 from src.routes.artiste import devient_artiste
 from src.utils.decorateurs import valide_json, doit_etre_artiste
 
@@ -148,4 +149,24 @@ def create_app(name):
         return {'commentaire': Commentaire.ajoute(flask_login.current_user.courriel,
                                                   numCommande, request.json.get('texte'))}, 201
 
+    # Factures
+    @app.route("/commande/<numCommande>/facture", methods=['GET'])
+    @login_required
+    def recupere_factures(numCommande):
+        return {'factures': Facture.recup_fac(numCommande=numCommande)}, 200
+
+    @app.route("/commande/<numCommande>/facturation", methods=['POST'])
+    @login_required
+    @valide_json('numCommande', 'adresseFac','total')
+    def facturer ():
+        return  facture.facturer(request), 201
+
+    @app.route("/factures", methods=['GET'])
+    @doit_etre_artiste
+    def sommaire_factures():
+        return {'factures': facture.sommaire_artiste()}, 200
+
     return app
+
+
+

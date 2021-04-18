@@ -93,7 +93,7 @@ class Oeuvre:
     @staticmethod
     @sql_gestion_erreur
     def exposition_totale(curseur):
-        curseur.execute('SELECT * FROM Oeuvre WHERE enExposition ORDER BY type;')
+        curseur.execute('SELECT * FROM Oeuvre WHERE enExposition GROUP BY type;')
         resultat = curseur.fetchall()
 
         if resultat is not None:
