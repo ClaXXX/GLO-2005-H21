@@ -16,10 +16,9 @@ CREATE TABLE IF NOT EXISTS Utilisateur(
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
-
 CREATE TABLE IF NOT EXISTS Artiste(
-    courriel varchar(64) PRIMARY KEY,
-    nom varchar(32) UNIQUE NOT NULL,
+    courriel varchar(64) UNIQUE NOT NULL,
+    nom varchar(32) PRIMARY KEY,
     FOREIGN KEY(courriel)
         REFERENCES Client(courriel)
         ON DELETE CASCADE
@@ -34,7 +33,8 @@ CREATE TABLE IF NOT EXISTS Oeuvre(
     enExposition int(1) DEFAULT FALSE,
     PRIMARY KEY(nom, auteur),
     FOREIGN KEY (auteur)
-        REFERENCES Artiste(nom)
+        REFERENCES Artiste(nom),
+    INDEX (type)
 );
 CREATE TABLE IF NOT EXISTS Commande(
     num integer AUTO_INCREMENT PRIMARY KEY,

@@ -33,10 +33,11 @@ class Oeuvre:
     @staticmethod
     @sql_gestion_erreur
     def ajoute(nom, auteur, dateCreation, type='', description='', enExposition=False):
-        oeuvre = f"('{nom}','{auteur}',STR_TO_DATE('{dateCreation}','%Y-%m-%d'),'{type}','{description}',{enExposition})".format(nom=nom, auteur=auteur, dateCreation=dateCreation, type=type, description=description, enExposition=enExposition)
+        oeuvre = f"INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) " \
+                 f"VALUE ('{nom}','{auteur}',STR_TO_DATE('{dateCreation}','%Y-%m-%d'),'{type}','{description}',{enExposition})"\
+            .format(nom=nom, auteur=auteur, dateCreation=dateCreation, type=type, description=description, enExposition=enExposition)
         cursor = DataBase.cursor()
-        cursor.execute(f"INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) VALUE {oeuvre}"
-                       .format(oeuvre=oeuvre))
+        cursor.execute(oeuvre)
         return {}
 
     @staticmethod

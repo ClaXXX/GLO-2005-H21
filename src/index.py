@@ -137,6 +137,7 @@ def create_app(name):
 
     # Commandes
     @app.route("/commande/<numCommande>/commentaires", methods=['GET'])
+    @login_required
     def recupere_commentaires(numCommande):
         return {'commentaires': Commentaire.recupere_tous(numCommande=numCommande)}, 200
 
