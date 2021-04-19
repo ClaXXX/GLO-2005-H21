@@ -14,7 +14,8 @@ const loginApp = new Vue({
         },
         artisteForm: {
             nom: ''
-        }
+        },
+        msg: ''
     },
     el: '#artwhale-login',
     delimiters: ['[[', ']]'],
@@ -22,16 +23,15 @@ const loginApp = new Vue({
         devientArtiste: function (event) {
             event.preventDefault();
             devenirArtiste(this.artisteForm.nom)
-                .then(() => window.location.reload());
+                .then(() => window.location.reload())
+                .catch(err => this.msg = err.message);
         },
         onLogin: function (event) {
             event.preventDefault();
             connection(this.loginForm)
                 .then(res => {
-                    console.log(res);
-                    if (res.status === 200)
-                        location.reload();
-                });
+                    location.reload();
+                }).catch(err => this.msg = err.message);
         },
         onRegister: function (event) {
             event.preventDefault();
@@ -39,9 +39,8 @@ const loginApp = new Vue({
                 return;
             delete this.registerForm.mdpConfirmation;
             creer_compte(this.registerForm).then(res => {
-                if (res.status === 201)
-                    location.reload();
-            })
+                location.reload();
+            }).catch(err => this.msg = err.message)
             this.registerForm.mdpConfirmation = '';
         },
         onLogout: function (event) {

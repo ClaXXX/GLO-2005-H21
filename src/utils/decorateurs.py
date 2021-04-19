@@ -1,7 +1,7 @@
 import functools
 
 import flask_login
-from flask import abort, request
+from flask import abort, request, make_response, jsonify
 from pymysql import Error
 
 
@@ -27,7 +27,7 @@ def valide_json(*arguments_attendu):
 def doit_etre_artiste(func):
     def artiste_wrapper(*args, **kwargs):
         if not flask_login.current_user.estArtiste():
-            abort(401, {'message': 'Vous devez être artiste pour pouvoir créer une oeuvre'})
+            abort(make_response(jsonify(message="Vous devez être artiste pour effectuer cette action"), 401))
         return func(*args, **kwargs)
     artiste_wrapper.__name__ = func.__name__
     return artiste_wrapper
@@ -38,5 +38,5 @@ def sql_gestion_erreur(func):
         try:
             return func(*args, **kwargs)
         except Error as err:
-            abort(400, {'message': err.args[1]})
+            abort(make_response(jsonify(message=err.args[1]), 400))
     return sql_wrapper

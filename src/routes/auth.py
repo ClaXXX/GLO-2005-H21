@@ -1,5 +1,5 @@
 from flask_login import login_user
-from flask import abort, flash, request
+from flask import abort, flash, request, jsonify, make_response
 
 from ..database.artiste import Artiste
 from ..database.client import Client
@@ -10,12 +10,10 @@ from ..utils.decorateurs import retourne_dict
 def connection():
     user = Client.connection(courriel=request.json.get('courriel'),
                              mdp=request.json.get('mdp'))
-    print(user)
     if user is None:
-        abort(400, {'message': "Informations invalides!"})
+        abort(make_response(jsonify(message="Informations d'authentification invalides!"), 400))
     artiste = Artiste.trouveAvecCourriel(courriel=user.courriel)
     if artiste is not None:
-        print(artiste)
         login_user(artiste)
         flash('Connection réussie. Connecté en tant que artiste')
     else:

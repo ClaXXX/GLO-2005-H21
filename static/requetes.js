@@ -1,3 +1,12 @@
+async function handleResponse(response) {
+    contenu = await response.json();
+    if (!response.ok) {
+        throw Error(contenu.message);
+    }
+    return contenu;
+}
+
+
 async function connection(form) {
     return fetch(`/connection`, {
         method: 'POST',
@@ -5,7 +14,7 @@ async function connection(form) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(form)
-    });
+    }).then(handleResponse);
 }
 
 async function creer_compte(form) {
@@ -15,11 +24,11 @@ async function creer_compte(form) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(form)
-    })
+    }).then(handleResponse)
 }
 
 async function deconnection() {
-    return fetch('/deconnection', { method: 'PUT' });
+    return fetch('/deconnection', { method: 'PUT' }).then(handleResponse);
 }
 
 async function devenirArtiste(nom) {
@@ -29,29 +38,27 @@ async function devenirArtiste(nom) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({nom})
-    })
+    }).then(handleResponse)
 }
 async function fermerArtiste() {
     return fetch('/artiste/finir', {
         method: 'DELETE',
-    })
+    }).then(handleResponse)
 }
 
 async function fetch_oeuvre() {
     return fetch(`/oeuvre`, {
         method: 'GET'
-    }).then(function (response) {
-                return response.json()
-            }).then(function(data){
+    }).then(handleResponse)
+        .then(function(data){
                 return data.oeuvre
             })
 }
 async function fetch_artiste() {
     return fetch(`/artiste`, {
         method: 'GET'
-    }).then(function (response) {
-                return response.json()
-            }).then(function(data){
+    }).then(handleResponse)
+        .then(function(data){
                 return data.artiste
             })
 }
@@ -59,9 +66,8 @@ async function fetch_artiste() {
 async function rechercher(recherche, type) {
     return fetch(`/search/?type=${type}&recherche=${recherche}`, {
         method: 'GET'
-    }).then(function (response) {
-                return response.json()
-            }).then(function(data){
+    }).then(handleResponse)
+        .then(function(data){
                 return data.oeuvre
             })
 }
@@ -73,7 +79,7 @@ async function creer_oeuvre(form) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(form)
-    })
+    }).then(handleResponse)
 }
 async function supprimer_oeuvre(nom,auteur) {
     return fetch('/oeuvre/supprimer', {
@@ -82,18 +88,18 @@ async function supprimer_oeuvre(nom,auteur) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({nom,auteur},)
-    })
+    }).then(handleResponse)
 }
 
 // Commandes
 async function fetch_commandes() {
     return fetch('/commande', { method: 'GET' })
-        .then(res => res.json()).then(data => data.commandes);
+        .then(handleResponse).then(data => data.commandes);
 }
 
 async function fetch_commentaires(num) {
     return fetch(`/commande/${num}/commentaires`, { method: 'GET' })
-        .then(res => res.json()).then(data => data.commentaires);
+        .then(handleResponse).then(data => data.commentaires);
 }
 
 async function ajoute_commentaire(numero, texte) {
@@ -103,5 +109,5 @@ async function ajoute_commentaire(numero, texte) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({texte})
-    });
+    }).then(handleResponse);
 }
