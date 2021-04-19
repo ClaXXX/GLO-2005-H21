@@ -17,9 +17,9 @@ class Commentaire:
     @staticmethod
     @sql_gestion_erreur
     def ajoute(auteur, numCommande, texte, curseur=DataBase.cursor()):
-        curseur.execute("INSERT INTO Commentaire (auteur, numCommande, texte) VALUE (%s)",
-                        f"{auteur}, {numCommande}, {texte}")
-        return {}  # TODO: <- retravailler le retour fonction
+        print(auteur, numCommande, texte)
+        curseur.execute("INSERT INTO Commentaire (auteur, numCommande, texte) VALUE (%s, %s, %s)",
+                        (auteur, numCommande, texte))
 
     @staticmethod
     @sql_gestion_erreur

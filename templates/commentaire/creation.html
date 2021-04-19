@@ -1,5 +1,5 @@
 <div class="col-12 container-padding">
-  <form id="commentaireForm" v-on:submit.prevent="console.log('heelo')">
+  <form id="commentaireForm" v-on:submit.prevent="ajoute_commentaire()">
     <div class="form-group">
       <textarea class="form-control input-lg" id="commentaire" name="commentaire" autocomplete="off"
                placeholder="Commenter" v-model="commentaire" maxlength="128" required></textarea>

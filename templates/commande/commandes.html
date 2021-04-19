@@ -1,24 +1,28 @@
 <div id="commandes">
     <h2 class="d-inline-flex" style="padding-top: 32px">Mes commandes</h2>
     <hr/>
-    {% if commandes.length == 0 %}
-        <div class="text-center w-100">Aucune commande à afficher</div>
-    {% else %}
-        <div class="row">
-            <div class="col-4">
-                {% for commande in commandes %}
-                <commande num="{{commande.num}}"
-                          superviseur="{{commande.superviseur}}"
-                          statut="{{commande.statut}}"
-                          type="{{commande.type}}"></commande>
-                {% endfor %}
-            </div>
-            <div class="col-8 commande-container">
-                <div class="commentaire-bottom">
-                    {% include 'commentaire/creation.html' %}
-                </div>
+    <div v-if="commandes == undefined || commandes.length == 0" class="text-center w-100">Aucune commande à afficher</div>
+    <div v-else class="row">
+        <div class="col-4">
+            <button class="btn btn-link" v-for="commande in commandes" v-on:click="selectionner_commande(commande)">
+                <commande
+                          :num="commande.num"
+                          :superviseur="commande.superviseur"
+                          :statut="commande.statut"
+                          :type="commande.type">
+                </commande>
+            </button>
+        </div>
+        <div class="col-8 commande-container">
+            <div class="commentaire-bottom">
+                <strong v-if="selected != undefined">
+                    Commande faite à [[ selected.superviseur ]]
+                </strong>
+                <hr/>
+                {% include 'commentaire/commentaires.html' %}
+                {% include 'commentaire/creation.html' %}
             </div>
         </div>
-    {% endif %}
+    </div>
 </div>
 <script src="{{ url_for('static', filename='commandes.js') }}"></script>

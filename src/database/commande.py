@@ -13,14 +13,27 @@ class Commande:
         self.type = commande_type
 
     def toDict(self):
-        return { 'num': self.num, 'oeuvre': self.oeuvre, 'superviseur': self.superviseur, 'demandeur': self.demandeur,
-                 'statut': self.statut, 'prix': self.prix, 'type': self.type }
+        return {'num': self.num, 'oeuvre': self.oeuvre, 'superviseur': self.superviseur, 'demandeur': self.demandeur,
+                'statut': self.statut, 'prix': self.prix, 'type': self.type}
 
     @staticmethod
     @sql_gestion_erreur
-    def mes_commandes(courriel):
-        curseur = DataBase.cursor()
+    def mes_commandes(courriel, curseur=DataBase.cursor()):
         curseur.execute("SELECT * FROM Commande WHERE demandeur=%s", courriel)
         commandes = curseur.fetchall()
         if commandes is not None:
             return [Commande(c[0], c[1], c[2], c[3], c[4], c[5], c[6]).toDict() for c in commandes]
+
+    @staticmethod
+    @sql_gestion_erreur
+    def commander_reservation(oeuvre, superviseur, demandeur, prix, adresse_livraison, curseur=DataBase.cursor()):
+        commande = f"{oeuvre}, {superviseur}, {demandeur}, {prix}, {adresse_livraison}"
+        curseur.execute("INSERT INTO Commande (oeuvre, superviseur, demandeur, prix, type) VALUE (%s)", commande)
+        return curseur.fetchall()[0]  # retourne le numero de la commande créée
+
+    @staticmethod
+    @sql_gestion_erreur
+    def commander_creation(superviseur, demandeur, prix, adresse_livraison, curseur=DataBase.cursor()):
+        commande = f"{superviseur}, {demandeur}, {prix}, {adresse_livraison}"
+        curseur.execute("INSERT INTO Commande (superviseur, demandeur, prix, type) VALUE (%s)", commande)
+        return curseur.fetchall()[0]  # retourne le numero de la commande créée

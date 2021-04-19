@@ -84,3 +84,24 @@ async function supprimer_oeuvre(nom,auteur) {
         body: JSON.stringify({nom,auteur},)
     })
 }
+
+// Commandes
+async function fetch_commandes() {
+    return fetch('/commande', { method: 'GET' })
+        .then(res => res.json()).then(data => data.commandes);
+}
+
+async function fetch_commentaires(num) {
+    return fetch(`/commande/${num}/commentaires`, { method: 'GET' })
+        .then(res => res.json()).then(data => data.commentaires);
+}
+
+async function ajoute_commentaire(numero, texte) {
+    return fetch(`/commande/${numero}/ajouteCommentaire`, {
+        method: 'POST',
+                headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({texte})
+    });
+}

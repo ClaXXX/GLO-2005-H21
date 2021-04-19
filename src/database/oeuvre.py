@@ -32,13 +32,18 @@ class Oeuvre:
 
     @staticmethod
     @sql_gestion_erreur
-    def ajoute(nom, auteur, dateCreation, type='', description='', enExposition=False):
-        oeuvre = f"INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) " \
-                 f"VALUE ('{nom}','{auteur}',STR_TO_DATE('{dateCreation}','%Y-%m-%d'),'{type}','{description}',{enExposition})"\
-            .format(nom=nom, auteur=auteur, dateCreation=dateCreation, type=type, description=description, enExposition=enExposition)
-        cursor = DataBase.cursor()
-        cursor.execute(oeuvre)
+    def ajoute(nom, auteur, dateCreation, type='', description='', enExposition=False, cursor = DataBase.cursor()):
+        cursor.execute("INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) VALUE"
+                       " (%s, %s,STR_TO_DATE(%s,'%Y-%m-%d'),%s,%s,%s);",
+                       (nom, auteur, dateCreation, type, description, enExposition))
         return {}
+
+    @staticmethod
+    @sql_gestion_erreur
+    def retrouve_oeuvre(nom, artiste, curseur=DataBase.cursor()):
+        curseur.execute("SELECT * FROM Oeuvre WHERE nom=%s AND auteur=%s;", (nom, artiste))
+        oeuvre = curseur.fetchone()
+        return Oeuvre(oeuvre[0], oeuvre[1], oeuvre[2], oeuvre[3], oeuvre[4], oeuvre[5]).toDict()
 
     @staticmethod
     @sql_gestion_erreur
@@ -95,7 +100,7 @@ class Oeuvre:
     def exposition_totale(curseur):
         curseur.execute('SELECT * FROM Oeuvre WHERE enExposition GROUP BY type;')
         resultat = curseur.fetchall()
-
+        print(resultat)
         if resultat is not None:
             galerie = [Oeuvre(x[0],x[1],x[2],x[3],x[4],x[5]).toDict() for x in resultat]
             return galerie

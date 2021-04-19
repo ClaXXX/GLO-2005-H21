@@ -11,7 +11,7 @@ from src.database.commande import Commande
 from src.database.commentaire import Commentaire
 from src.database.oeuvre import Oeuvre
 from src.database.facture import Facture
-from src.routes import auth
+from src.routes import auth, commande
 from src.routes import oeuvre, artiste, facture
 from src.routes.artiste import devient_artiste
 from src.utils.decorateurs import valide_json, doit_etre_artiste
@@ -80,8 +80,6 @@ def create_app(name):
     def finir_artiste():
         return artiste.fin_artiste(), 200
 
-
-
     @app.route("/artiste", methods=['GET'])
     def recup_artiste():
         response = {
@@ -111,8 +109,6 @@ def create_app(name):
     def supprimer_oeuvre():
         return oeuvre.supprime_oeuvre(), 200
 
-
-
     @app.route("/search/", methods=['GET'])
     def recherche():
         type = request.args.get('type')
@@ -137,6 +133,23 @@ def create_app(name):
             return jsonify(response)
 
     # Commandes
+    @app.route("/commande", methods=['GET'])
+    @login_required
+    def retourne_commandes():
+        return {"commandes": Commande.mes_commandes(flask_login.current_user.courriel)}, 200
+
+    @app.route("/commande/creer", methods=['POST'])
+    @login_required
+    @valide_json('oeuvre', 'artiste', 'prix', 'adresseLivraison', 'commentaire')
+    def creer_commande():
+        return commande.creer_commande()
+
+    @app.route("/commande/reserver", methods=['POST'])
+    @login_required
+    @valide_json('artiste', 'prix', 'adresseLivraison', 'commentaire')
+    def reserver_commande():
+        return commande.reserver_commande()
+
     @app.route("/commande/<numCommande>/commentaires", methods=['GET'])
     @login_required
     def recupere_commentaires(numCommande):
@@ -146,8 +159,9 @@ def create_app(name):
     @login_required
     @valide_json('texte')
     def ajoute_commentaire(numCommande):
-        return {'commentaire': Commentaire.ajoute(flask_login.current_user.courriel,
-                                                  numCommande, request.json.get('texte'))}, 201
+        Commentaire.ajoute(flask_login.current_user.courriel,
+                           numCommande, request.json.get('texte'))
+        return {}, 201
 
     # Factures
     @app.route("/commande/<numCommande>/facture", methods=['GET'])
@@ -157,9 +171,9 @@ def create_app(name):
 
     @app.route("/commande/<numCommande>/facturation", methods=['POST'])
     @login_required
-    @valide_json('numCommande', 'adresseFac','total')
-    def facturer ():
-        return  facture.facturer(request), 201
+    @valide_json('numCommande', 'adresseFac', 'total')
+    def facturer():
+        return facture.facturer(request), 201
 
     @app.route("/factures", methods=['GET'])
     @doit_etre_artiste
@@ -167,6 +181,3 @@ def create_app(name):
         return {'factures': facture.sommaire_artiste()}, 200
 
     return app
-
-
-

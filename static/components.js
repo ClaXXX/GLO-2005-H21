@@ -60,8 +60,8 @@ Vue.component('commande', {
       '    <img class="card-img col-3" src="/static/assets/logo.svg" alt="Card image cap">' +
       '    <div class="card-body col-9" style="padding-left: 10px">' +
       '      <small class="float-right text-muted"> {{statut}}</small>' +
-      '      <div class="card-title oeuvre-titre">{{num}}</div>' +
-      '      <div class="card-text">{{superviseur}}</div>' +
+      '      <div class="card-title oeuvre-titre">{{superviseur}}</div>' +
+      '      <small class="card-text float-right">{{num}}</small>' +
       '    </div>' +
       '  </div>' +
       '</div>'
