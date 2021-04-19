@@ -5,11 +5,12 @@ const commandesApp = new Vue({
         commandes: [],
         selected: {undefined},
         commentaire: '',
-        commentaires: []
+        commentaires: [],
+        msg: ''
     },
     mounted: function () {
         this.mes_commandes()
-            .then(num_commande => num_commande !== undefined ? this.commentaires_par_commande(num_commande) : null);
+            .then(num_commande => this.commentaires_par_commande(num_commande));
     },
     methods: {
         mes_commandes: async function () {
@@ -31,7 +32,7 @@ const commandesApp = new Vue({
                 return;
             ajoute_commentaire(this.selected.num, this.commentaire).then(() => {
                 this.commentaire = '';
-            });
+            }).catch(err => this.msg = err.message );
         }
     }
 });

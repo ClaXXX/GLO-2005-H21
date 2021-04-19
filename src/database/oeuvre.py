@@ -32,10 +32,11 @@ class Oeuvre:
 
     @staticmethod
     @sql_gestion_erreur
-    def ajoute(nom, auteur, dateCreation, type='', description='', enExposition=False, cursor = DataBase.cursor()):
-        cursor.execute("INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) VALUE"
-                       " (%s, %s,STR_TO_DATE(%s,'%Y-%m-%d'),%s,%s,%s);",
-                       (nom, auteur, dateCreation, type, description, enExposition))
+    def ajoute(nom, auteur, dateCreation, type='', description='', enExposition=False, curseur = DataBase.cursor()):
+        oeuvre = f"INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) " \
+                 f"VALUE ('{nom}','{auteur}',STR_TO_DATE('{dateCreation}','%Y-%m-%d'),'{type}','{description}',{enExposition})"\
+            .format(nom=nom, auteur=auteur, dateCreation=dateCreation, type=type, description=description, enExposition=enExposition)
+        curseur.execute(oeuvre)
         return {}
 
     @staticmethod

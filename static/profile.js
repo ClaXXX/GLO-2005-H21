@@ -8,8 +8,9 @@ const profileApp = new Vue({
             dateCreation: Date.now(),
             type: '',
             description: '',
-            enExposition: false
-        }
+            enExposition: false,
+        },
+        msg: ''
     },
     delimiters: ['[[', ']]'],
     methods: {
@@ -17,24 +18,23 @@ const profileApp = new Vue({
             event.preventDefault();
             creer_oeuvre(this.oeuvreForm)
                 .then(res => {
-                    if (res.status === 201)
-                        window.location.reload()
+                    window.location.reload()
+                }).catch(err => {
+                    this.msg = err.message
                 })
         },
         supprimeOeuvre: function (event,auteur,nom) {
             event.preventDefault();
             supprimer_oeuvre(nom, auteur)
                 .then(res => {
-                    if (res.status === 201)
-                        window.location.reload()
+                    window.location.reload()
                 })
         },
         finCompteArti: function(event){
             event.preventDefault();
             fermerArtiste()
                 .then(res => {
-                    if (res.status === 200)
-                        window.location.reload()
+                    window.location.reload()
                 })
         }
 

@@ -3,6 +3,7 @@ const loginApp = new Vue({
         loginForm: {
             courriel: '',
             mdp: '',
+            msg: ''
         },
         registerForm: {
             courriel: '',
@@ -10,10 +11,12 @@ const loginApp = new Vue({
             mdpConfirmation: '',
             nom: '',
             prenom: '',
-            adresse: ''
+            adresse: '',
+            msg: ''
         },
         artisteForm: {
-            nom: ''
+            nom: '',
+            msg: ''
         },
         msg: ''
     },
@@ -24,24 +27,22 @@ const loginApp = new Vue({
             event.preventDefault();
             devenirArtiste(this.artisteForm.nom)
                 .then(() => window.location.reload())
-                .catch(err => this.msg = err.message);
+                .catch(err => this.artisteForm.msg = err.message);
         },
         onLogin: function (event) {
             event.preventDefault();
             connection(this.loginForm)
                 .then(res => {
                     location.reload();
-                }).catch(err => this.msg = err.message);
+                }).catch(err => this.loginForm.msg = err.message);
         },
         onRegister: function (event) {
             event.preventDefault();
             if (this.registerForm.mdp !== this.registerForm.mdpConfirmation)
                 return;
-            delete this.registerForm.mdpConfirmation;
             creer_compte(this.registerForm).then(res => {
                 location.reload();
-            }).catch(err => this.msg = err.message)
-            this.registerForm.mdpConfirmation = '';
+            }).catch(err => this.registerForm.msg = err.message)
         },
         onLogout: function (event) {
             event.preventDefault();
