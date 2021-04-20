@@ -10,6 +10,14 @@ const profileApp = new Vue({
             description: '',
             enExposition: false,
         },
+        reservation_form: {
+            type: '',
+            oeuvre: '',
+            artiste: '',
+            prix: 0,
+            adresseLivraison: '',
+            commentaire: ''
+        },
         msg: ''
     },
     delimiters: ['[[', ']]'],
@@ -36,7 +44,25 @@ const profileApp = new Vue({
                 .then(res => {
                     window.location.reload()
                 })
-        }
-
+        },
+        selectionne_oeuvre: function(oeuvre) {
+            console.log("hello oeuvre:", oeuvre)
+            this.reservation_form.type = "Réservation";
+            this.reservation_form.oeuvre = oeuvre.nom;
+            this.reservation_form.artiste = oeuvre.auteur;
+        },
+        nouvelle_commande: function(artiste) {
+            this.reservation_form.type = "Création";
+            this.reservation_form.artiste = artiste;
+        },
+        creer_commande: function () {
+            return this.reservation_form.type === "Création" ?
+                creer(this.reservation_form) : reserver(this.reservation_form);
+        },
+        reserver_oeuvre: function() {
+            this.creer_commande()
+                .then(() => $('#reservation-oeuvre-modal').modal('hide'))
+                .catch(err => this.msg = err.message);
+        },
     }
 })
