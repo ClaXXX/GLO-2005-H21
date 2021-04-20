@@ -35,7 +35,7 @@ const profileApp = new Vue({
             event.preventDefault();
             supprimer_oeuvre(nom, auteur)
                 .then(res => {
-                    window.location.reload()
+                    window.location.reload(true)
                 })
         },
         finCompteArti: function(event){

@@ -33,9 +33,7 @@ class Oeuvre:
     @staticmethod
     @sql_gestion_erreur
     def ajoute(nom, auteur, dateCreation, type='', description='', enExposition=False, curseur = DataBase.cursor()):
-        oeuvre = f"INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) " \
-                 f"VALUE ('{nom}','{auteur}',STR_TO_DATE('{dateCreation}','%Y-%m-%d'),'{type}','{description}',{enExposition})"\
-            .format(nom=nom, auteur=auteur, dateCreation=dateCreation, type=type, description=description, enExposition=enExposition)
+        oeuvre = f"INSERT INTO Oeuvre (nom, auteur, dateCreation, type, description, enExposition) VALUE ('{nom}','{auteur}',STR_TO_DATE('{dateCreation}','%Y-%m-%d'),'{type}','{description}',{enExposition})"
         curseur.execute(oeuvre)
         return {}
 
@@ -99,7 +97,7 @@ class Oeuvre:
     @staticmethod
     @sql_gestion_erreur
     def exposition_totale(curseur):
-        curseur.execute('SELECT * FROM Oeuvre WHERE enExposition GROUP BY type;')
+        curseur.execute('SELECT * FROM Oeuvre WHERE enExposition ORDER BY type;')
         resultat = curseur.fetchall()
         print(resultat)
         if resultat is not None:
