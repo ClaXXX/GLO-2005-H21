@@ -39,11 +39,13 @@
 
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="oeuvres" role="tabpanel" aria-labelledby="oeuvre-tab">
-    <oeuvre v-for="oeuvre in oeuvres" v-bind:nom="oeuvre.nom"
-      v-bind:auteur="oeuvre.auteur"
-      v-bind:date="oeuvre.dateCreation"
-      v-bind:type="oeuvre.type"
-      v-bind:description="oeuvre.description">
+    <oeuvre v-for="oeuvre in oeuvres"
+            v-on:click="selectionne_oeuvre(oeuvre)"
+            :nom="oeuvre.nom"
+            :auteur="oeuvre.auteur"
+            :date="oeuvre.dateCreation"
+            :type="oeuvre.type"
+            :description="oeuvre.description">
     </oeuvre>
   </div>
 
@@ -53,6 +55,8 @@
     </artiste>
   </div>
 </div>
+
+    {% include 'oeuvre/reservation.html' %}
 
 </div>
 <script src="{{ url_for('static', filename='index.js') }}"></script>

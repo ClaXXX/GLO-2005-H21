@@ -97,6 +97,26 @@ async function fetch_commandes() {
         .then(handleResponse).then(data => data.commandes);
 }
 
+async function reserver(form) {
+    return fetch('/commande/reserver', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+    }).then(handleResponse).then(data => data.commande);
+}
+
+async function creer(form) {
+    return fetch('/commande/creer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+    }).then(handleResponse).then(data => data.commande);
+}
+
 async function fetch_artiste_commandes() {
     return fetch('/commande/artiste', { method: 'GET' })
         .then(handleResponse).then(data => data.commandes);

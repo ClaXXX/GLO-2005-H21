@@ -21,6 +21,9 @@ Vue.component('oeuvre', {
             return '<div class="float-right"> ' + (this.expose === '1' ? 'exposée' : 'non exposée') + '</div>'
         return ''
     },
+    emit_click: function () {
+        this.$emit('click');
+    }
   },
   template: '  ' +
       '<div class="card my-2 border-0">' +
@@ -35,6 +38,8 @@ Vue.component('oeuvre', {
       '  </div>' +
       '<suppression :nom="nom" :auteur="auteur" v-if="currentuser===auteur">'+
       '</suppression>'+
+      '<button v-else class="btn btn-primary" type="button" data-toggle="modal" data-target="#reservation-oeuvre-modal" v-on:click="emit_click()" > Commander'+
+      '</button>'+
       '  <div class="card-footer oeuvre-footer">' +
       '     <small class="text-muted">{{date}}</small> ' +
       '<a class="float-right" v-bind:href="\'/artiste/\' + this.auteur">{{auteur}}</a>' +

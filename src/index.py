@@ -150,13 +150,13 @@ def create_app(name):
 
     @app.route("/commande/creer", methods=['POST'])
     @login_required
-    @valide_json('oeuvre', 'artiste', 'prix', 'adresseLivraison', 'commentaire')
+    @valide_json('artiste', 'prix', 'adresseLivraison', 'commentaire')
     def creer_commande():
         return commande.creer_commande()
 
     @app.route("/commande/reserver", methods=['POST'])
     @login_required
-    @valide_json('artiste', 'prix', 'adresseLivraison', 'commentaire')
+    @valide_json('oeuvre', 'artiste', 'prix', 'adresseLivraison', 'commentaire')
     def reserver_commande():
         return commande.reserver_commande()
 
@@ -185,5 +185,9 @@ def create_app(name):
     def facturer(numCommande):
         return facture.facturer(request), 201
 
+    @app.route("/facture/recupere_toutes", methods=['GET'])
+    @doit_etre_artiste
+    def sommaire_factures():
+        return {'factures': facture.sommaire_artiste()}, 200
 
     return app

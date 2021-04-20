@@ -35,13 +35,16 @@ class Commande:
     @staticmethod
     @sql_gestion_erreur
     def commander_reservation(oeuvre, superviseur, demandeur, prix, adresse_livraison, curseur=DataBase.cursor()):
-        commande = f"{oeuvre}, {superviseur}, {demandeur}, {prix}, {adresse_livraison}"
-        curseur.execute("INSERT INTO Commande (oeuvre, superviseur, demandeur, prix, type) VALUE (%s)", commande)
-        return curseur.fetchall()[0]  # retourne le numero de la commande créée
+        print("Reserve commande")
+        curseur.execute("INSERT INTO Commande (oeuvre, superviseur, demandeur, prix, type) VALUE (%s, %s, %s, %s, %s)", (oeuvre, superviseur, demandeur, prix, adresse_livraison))
+        curseur.execute("SELECT MAX(num) FROM Commande;")
+        num = curseur.fetchone()
+        print(num)
+        return num  # retourne le numero de la commande créée
 
     @staticmethod
     @sql_gestion_erreur
     def commander_creation(superviseur, demandeur, prix, adresse_livraison, curseur=DataBase.cursor()):
-        commande = f"{superviseur}, {demandeur}, {prix}, {adresse_livraison}"
-        curseur.execute("INSERT INTO Commande (superviseur, demandeur, prix, type) VALUE (%s)", commande)
-        return curseur.fetchall()[0]  # retourne le numero de la commande créée
+        curseur.execute("INSERT INTO Commande (superviseur, demandeur, prix, type) VALUE (%s, %s, %s, %s, %s)", (superviseur, demandeur, prix, adresse_livraison))
+        curseur.execute("SELECT MAX(num) FROM Commande;")
+        return curseur.fetchone()  # retourne le numero de la commande créée

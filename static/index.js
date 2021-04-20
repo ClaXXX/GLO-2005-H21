@@ -7,6 +7,14 @@ const vueApp = new Vue({
         ],
         type_recherche: '',
         recherche:'',
+        reservation_form: {
+            oeuvre: '',
+            artiste: '',
+            prix: 0,
+            adresseLivraison: '',
+            commentaire: ''
+        },
+        msg: ''
     },
     delimiters: ['[[', ']]'],
     mounted:function(){
@@ -29,8 +37,16 @@ const vueApp = new Vue({
                 this.oeuvres = res.map(oeuvre => ({nom: oeuvre.nom, auteur: oeuvre.auteur,dateCreation: oeuvre.dateCreation,type:oeuvre.type,description:oeuvre.desc}))
                 this.artistes = res.map(oeuvre=> ({nom: oeuvre.auteur}))
             });
+        },
+        selectionne_oeuvre(oeuvre) {
+            this.reservation_form.oeuvre = oeuvre.nom;
+            this.reservation_form.artiste = oeuvre.auteur;
+        },
+        reserver_oeuvre() {
+            reserver(this.reservation_form)
+                .then(() => $('#reservation-oeuvre-modal').modal('hide'))
+                .catch(err => this.msg = err.message);
         }
-
     }
 })
 

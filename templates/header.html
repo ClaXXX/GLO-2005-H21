@@ -17,7 +17,7 @@
 
         {% if current_user.estArtiste() %}
           <a class="dropdown-item" href="/artiste/{{current_user.nomArtiste}}">Profil d'artiste</a>
-          <a class="dropdown-item" href="/factures/{{current_user.nomArtiste}}">Facturation</a>
+          <a class="dropdown-item" href="/factures">Facturation</a>
         {% else %}
           <button class="dropdown-item" type="button" data-toggle="modal" data-target="#artiste-modal">Devenir un artiste</button>
         {% endif %}
