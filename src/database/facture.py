@@ -21,7 +21,7 @@ class Facture:
     @staticmethod
     @sql_gestion_erreur
     def listefac(arti, curseur=DataBase.cursor()):
-        curseur.execute('SELECT * FROM Facture F, Commande C WHERE F.numCommande =C.numCommande AND C.superviseur =%s',arti)
+        curseur.execute('SELECT * FROM Facture F, Commande C WHERE F.numCommande=C.num AND C.superviseur =%s', arti)
         return [Facture(f[0], f[1], f[2], f[3]).getDict() for f in curseur.fetchall()]
 
     @staticmethod

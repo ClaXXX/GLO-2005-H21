@@ -1,28 +1,70 @@
 <div id="commandes">
     <h2 class="d-inline-flex" style="padding-top: 32px">Mes commandes</h2>
     <hr/>
-    <div v-if="commandes == undefined || commandes.length == 0" class="text-center w-100">Aucune commande à afficher</div>
-    <div v-else class="row">
-        <div class="col-4">
-            <button class="btn btn-link" v-for="commande in commandes" v-on:click="selectionner_commande(commande)">
-                <commande
-                          :num="commande.num"
-                          :superviseur="commande.superviseur"
-                          :statut="commande.statut"
-                          :type="commande.type">
-                </commande>
-            </button>
-        </div>
-        <div class="col-8 commande-container">
-            <div class="commentaire-bottom">
-                <strong v-if="selected != undefined">
-                    Commande faite à [[ selected.superviseur ]]
-                </strong>
-                <hr/>
-                {% include 'commentaire/commentaires.html' %}
-                {% include 'commentaire/creation.html' %}
+    {% if current_user.estArtiste() %}
+    <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" v-on:click="change_tab(true)" id="commande-client-tab" data-toggle="tab" data-target="#commande-client" type="button" role="tab" aria-controls="commande-client" aria-selected="true">En tant que client</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="commande-artiste-tab" v-on:click="change_tab(false)" data-toggle="tab" data-target="#commande-artiste" type="button" role="tab" aria-controls="commande-artiste" aria-selected="false">En tant que artiste</button>
+      </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="commande-client" role="tabpanel" aria-labelledby="commande-client-tab">
+    {%endif%}
+            <div v-if="commandes == undefined || commandes.length == 0" class="text-center w-100">Aucune commande à afficher</div>
+            <div v-else class="row">
+                <div class="col-4">
+                    <button class="btn btn-link" v-for="commande in commandes" v-on:click="selectionner_commande(commande)">
+                        <commande
+                                  :num="commande.num"
+                                  :superviseur="commande.superviseur"
+                                  :statut="commande.statut"
+                                  :type="commande.type">
+                        </commande>
+                    </button>
+                </div>
+                <div class="col-8 commande-container">
+                    <div class="commentaire-bottom">
+                        <strong v-if="selected != undefined">
+                            Commande faite à [[ selected.superviseur ]]
+                        </strong>
+                        <hr/>
+                        {% include 'commentaire/commentaires.html' %}
+                        {% include 'commentaire/creation.html' %}
+                    </div>
+                </div>
             </div>
         </div>
+    {% if current_user.estArtiste() %}
+        <div class="tab-pane fade" id="commande-artiste" role="tabpanel" aria-labelledby="commande-artiste-tab">
+            <div v-if="commande_artiste == undefined || commande_artiste.length == 0" class="text-center w-100">Aucune commande à afficher</div>
+            <div v-else class="row">
+                <div class="col-4">
+                    <button class="btn btn-link" v-for="commande in commande_artiste" v-on:click="selectionner_commande(commande)">
+                        <commande
+                                  :num="commande.num"
+                                  :superviseur="commande.superviseur"
+                                  :statut="commande.statut"
+                                  :type="commande.type">
+                        </commande>
+                    </button>
+                </div>
+                <div class="col-8 commande-container">
+                    <div class="commentaire-bottom">
+                        <strong v-if="selected != undefined">
+                            Commande faite par [[ selected.demandeur ]]
+                        </strong>
+                        <hr/>
+                        {% include 'commentaire/commentaires.html' %}
+                        {% include 'commentaire/creation.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
+    {%endif%}
 </div>
 <script src="{{ url_for('static', filename='commandes.js') }}"></script>

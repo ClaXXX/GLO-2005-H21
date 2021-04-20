@@ -44,6 +44,11 @@ def create_app(name):
                                artiste=artiste,
                                oeuvres=Oeuvre.pour_artiste(nom))
 
+    @app.route("/factures")
+    @doit_etre_artiste
+    def factures():
+        return render_template('index.html', titre="Mes factures", fichier="Facture/factures.html", factures=facture.sommaire_artiste())
+
     @app.route("/commandes")
     @login_required
     def mes_commandes():
@@ -138,6 +143,11 @@ def create_app(name):
     def retourne_commandes():
         return {"commandes": Commande.mes_commandes(flask_login.current_user.courriel)}, 200
 
+    @app.route("/commande/artiste", methods=['GET'])
+    @doit_etre_artiste
+    def commande_artiste():
+        return {"commandes": Commande.commande_artiste(flask_login.current_user.nomArtiste)}, 200
+
     @app.route("/commande/creer", methods=['POST'])
     @login_required
     @valide_json('oeuvre', 'artiste', 'prix', 'adresseLivraison', 'commentaire')
@@ -172,12 +182,8 @@ def create_app(name):
     @app.route("/commande/<numCommande>/facturation", methods=['POST'])
     @login_required
     @valide_json('numCommande', 'adresseFac', 'total')
-    def facturer():
+    def facturer(numCommande):
         return facture.facturer(request), 201
 
-    @app.route("/factures", methods=['GET'])
-    @doit_etre_artiste
-    def sommaire_factures():
-        return {'factures': facture.sommaire_artiste()}, 200
 
     return app

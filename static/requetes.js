@@ -97,6 +97,11 @@ async function fetch_commandes() {
         .then(handleResponse).then(data => data.commandes);
 }
 
+async function fetch_artiste_commandes() {
+    return fetch('/commande/artiste', { method: 'GET' })
+        .then(handleResponse).then(data => data.commandes);
+}
+
 async function fetch_commentaires(num) {
     return fetch(`/commande/${num}/commentaires`, { method: 'GET' })
         .then(handleResponse).then(data => data.commentaires);
