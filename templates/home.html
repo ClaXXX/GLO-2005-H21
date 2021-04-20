@@ -44,6 +44,13 @@
             :nom="oeuvre.nom"
             :auteur="oeuvre.auteur"
             :date="oeuvre.dateCreation"
+          {% if current_user.is_authenticated %}
+                {% if current_user.estArtiste() %}
+                currentuser="{{current_user.nomArtiste}}"
+                {% else %}
+                currentuser="{{current_user.courrier}}"
+              {% endif %}
+          {% endif %}
             :type="oeuvre.type"
             :description="oeuvre.description">
     </oeuvre>

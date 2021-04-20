@@ -38,7 +38,7 @@ Vue.component('oeuvre', {
       '  </div>' +
       '<suppression :nom="nom" :auteur="auteur" v-if="currentuser===auteur">'+
       '</suppression>'+
-      '<button v-else class="btn btn-primary" type="button" data-toggle="modal" data-target="#reservation-oeuvre-modal" v-on:click="emit_click()" > Commander'+
+      '<button v-if="currentuser !== undefined && currentuser!==auteur" class="btn btn-primary" type="button" data-toggle="modal" data-target="#reservation-oeuvre-modal" v-on:click="emit_click()" > Commander'+
       '</button>'+
       '  <div class="card-footer oeuvre-footer">' +
       '     <small class="text-muted">{{date}}</small> ' +

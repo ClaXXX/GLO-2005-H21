@@ -19,8 +19,12 @@
           type="{{oeuvre.type}}"
           description="{{oeuvre.desc}}"
                 v-on:click="selectionne_oeuvre({{oeuvre}})"
-          {% if current_user.is_authenticated and current_user.estArtiste() %}
+          {% if current_user.is_authenticated %}
+                {% if current_user.estArtiste() %}
                 currentuser="{{current_user.nomArtiste}}"
+                {% else %}
+                currentuser="{{current_user.courrier}}"
+              {% endif %}
           {% endif %}
         expose="{{oeuvre.enExposition}}">
         </oeuvre>
